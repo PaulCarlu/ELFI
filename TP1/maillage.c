@@ -1,3 +1,5 @@
+// Carlu Paul - Martin Malo
+//
 #include <stdio.h>
 #include <stdlib.h>
 #include "allocmat.h"
@@ -119,20 +121,19 @@ void maillage(char* nomFichierDonnees, char* nomFichierMaillage) {
 
 void lecfima(char *ficmai, int *p_typel, int *p_nbtng, float ***ppp_coord, int *p_nbtel, 
             int ***ppp_ngnel, int *p_nbneel, int *p_nbaret, int ***ppp_nRefAr) {
-    /* Notations */
-    // t : typel
-    // n : nbtng
-    // m : nbtel
-    // p : nbneel
-    // q : nbaret
-    //
+    /* Notations :
+    - typel : type de l'élément géométrique
+    - nbtng : nombre total de noeuds
+    - nbtel : nombre total d'éléments
+    - nbneel : nombre de noeuds sur un élément
+    - nbaret : nombre d'arêtes sur un élément
+    */
     FILE* fichierMaillage = fopen(ficmai, "r");
     if (!fichierMaillage) {
         perror("fopen");
         exit(EXIT_FAILURE);
     }
-
-    fscanf(fichierMaillage,"%d",p_nbtng);   // n
+    fscanf(fichierMaillage,"%d",p_nbtng);
 
     /* Coordonnées */
     float **mat_coord = allocmatFLOAT(*p_nbtng,2);
@@ -141,7 +142,7 @@ void lecfima(char *ficmai, int *p_typel, int *p_nbtng, float ***ppp_coord, int *
     }
     *ppp_coord = mat_coord;
 
-    fscanf(fichierMaillage,"%d %d %d %d",p_nbtel,p_typel,p_nbneel,p_nbaret);   // t m p q
+    fscanf(fichierMaillage,"%d %d %d %d",p_nbtel,p_typel,p_nbneel,p_nbaret);
 
     /* Numéros globaux noeuds éléments + numéros globaux référence arêtes */
     int **mat_ngnel = allocmatINT(*p_nbtel,*p_nbneel);
