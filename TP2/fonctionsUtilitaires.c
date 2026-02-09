@@ -1,6 +1,17 @@
+// Carlu Paul - Martin Malo
+//
 #include <stdlib.h>
 
 void ppquad(int t, float *romega, float **rx){
+	/*
+	Renvoie les poids et points de quadrature selon le type de l'élément
+	 
+	En entrée :
+	- t : type de l'élément (1 quadrangle, 2 triangle, 3 segment) 
+	En sortie :
+	- romega : vecteur des poids de quadrature
+	- rx : matrice de coordonnées des points de quadrature
+	*/
 	if (t==1){
 		for(int k=0;k<3;k++){romega[k] = 1.0/36;}
 		for(int k=4;k<7;k++){romega[k] = 1.0/9;}
@@ -31,6 +42,14 @@ void ppquad(int t, float *romega, float **rx){
 }
 
 int valq(int t){
+	/*
+	Renvoie le nombre de poids et points de quadrature selon le type géométrique de l'élément
+
+	En entrée : 
+	- t : type de l'élément (1 quadrangle, 2 triangle, 3 segment) 
+	En sortie : 
+	- q : nombre de poids et points de quadrature
+	*/
 	int q = 0;
 	if(t==1){ q=9; }
 	else if(t==2 || t==3){ q=3; }
@@ -38,11 +57,20 @@ int valq(int t){
 }
 
 void calFbase(int t, float* x, float* Fbase){
+	/*
+	Calcul la valeur en un point des fonctions de base associées à l'élément de référence
+
+	En entrée :
+	- t : type de l'élément de référence (1 quadrangle, 2 triangle, 3 segment)
+	- x : vecteur de coordonnées du point à évaluer
+	En sortie : 
+	- Fbase : vecteur contenant les valeurs des fonctions de base calculées au point x
+	*/
 	if (t==1){
 		Fbase[0] = x[0] - x[0]*x[1];
 		Fbase[1] = x[0]*x[1];
 		Fbase[2] = x[1] - x[0]*x[1];
-		Fbase[0] = 1 -x[1] - x[0] + x[0]*x[1];
+		Fbase[3] = 1 -x[1] - x[0] + x[0]*x[1];
 	}
 	else if (t==2){
 		Fbase[0] = x[0];
@@ -56,6 +84,15 @@ void calFbase(int t, float* x, float* Fbase){
 }
 
 void calDerFbase(int t, float* x, float** d_Fbase){
+	/*
+	Calcul la valeur en un point des dérivées des fonctions de base associées à l'élément de référence
+
+	En entrée :
+	- t : type de l'élément de référence (1 quadrangle, 2 triangle, 3 segment)
+	- x : vecteur de coordonnées du point à évaluer
+	En sortie : 
+	- d_Fbase : matrice contenant les valeurs des dérivées des fonctions de base calculées au point x
+	*/
 	if (t==1){
 		d_Fbase[0][0] = 1 - x[1];
 		d_Fbase[0][1] = x[0];
@@ -88,7 +125,7 @@ void transFK(int q, float **a, float *Fbase, float *FK) {
 	}
 }
 
-void matJacob(int d, int p,float**, coordFK float** d_Fbase, float** JacFK){
+void matJacob(int d, int p, float** coordFK, float** d_Fbase, float** JacFK){
 	if (d == 1){
 		JacFK[0][0] = 0;
 		JacFK[1][0] = 0;
@@ -120,7 +157,7 @@ void invertM2x2(float** A, float** InvA, float det){
 		exit(EXIT_FAILURE);
 	}
 	else{
-		invDet = 1/det;
+		float invDet = 1/det;
 		InvA[0][0] = invDet*A[1][1];
 		InvA[0][1] = -invDet*A[0][1];
 		InvA[1][0] = -invDet*A[1][0];
