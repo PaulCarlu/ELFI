@@ -118,6 +118,17 @@ void calDerFbase(int t, float* x, float** d_Fbase){
 }
 
 void transFK(int q, float **a, float *Fbase, float *FK) {
+	/*
+	Calcul l'image d'un point de l'élément de référence par la transformation notée FK :
+	FK = [somme sur i de 1 à q] des (i fonctions de base calculer au point souhaité) * (coordonnées des noeuds géométriques)
+
+	En entrée : 
+	- q : nombre de poids et points de quadrature
+	- a : matrice contenant les coordonnées des noeuds géométriques
+	- Fbase : vecteur des valeurs des fonctions de base au point souhaité
+	En sortie :
+	- FK : vecteur qui contient le résultat de la transformation 
+	*/
 	FK[0] = 0; FK[1] = 0;
 	for (int i=0; i<q; i++) {
 		FK[0] += Fbase[i]*a[i][0];
@@ -126,6 +137,17 @@ void transFK(int q, float **a, float *Fbase, float *FK) {
 }
 
 void matJacob(int d, int p, float** coordFK, float** d_Fbase, float** JacFK){
+	/*
+	Calcul la matrice jacobienne de la transformation FK
+
+	En entrée :
+	- d : dimension de l'ensemble de départ de FK (1 segment, 2 triangle/quadrangle)
+	- p : nombre de fonctions de bases
+	- coordFK : matrice des coordonnées des noeuds géométriques
+	- d_Fbase : matrices des valeurs des dérivées des fonctions de base au point souhaité
+	En sortie : 
+	- JacFK : matrice contenant la jacobienne de la transformation FK
+	*/
 	if (d == 1){
 		JacFK[0][0] = 0;
 		JacFK[1][0] = 0;
@@ -149,8 +171,17 @@ void matJacob(int d, int p, float** coordFK, float** d_Fbase, float** JacFK){
 }
 
 void invertM2x2(float** A, float** InvA, float det){
+	/*
+	Renvoie le déterminant d'une matrice de taille 2x2 ainsi que son inverse
+
+	En entrée :
+	- A : matrice de taille 2x2 à inverser
+	En sortie :
+	- InvA : matrice inverse de A
+	- det : déterminant de la matrice A
+	*/
 	det = A[0][0]*A[1][1] - A[1][0]*A[0][1];
-  // Critère d'inversibilité : 1e-10
+    // Critère d'inversibilité : 1e-10
 	if(fabs(det)<0.0000000001){
 		printf("Le déterminant vaut en valeur absolue : \f <1e-10",&det);
 		printf("C'est trop proche de 0 pour que la matrice soit considérée comme inversible");
@@ -166,6 +197,15 @@ void invertM2x2(float** A, float** InvA, float det){
 }
 
 void numNaret(int t, int Naret, int* numPnts_Naret){
+	/*
+	Renvoie la liste des numéros locaux des noeuds qui sont situés sur une arête de numéro donné sur l'élément de référence
+
+	En entrée :
+	- t : type de l'élément de référence (1 quadrangle, 2 triangle)
+	- Naret : numéro de l'arête sur l'élément de référence 
+	En sortie :
+	- numPnts_Naret : vecteur des numéros locaux des noeuds situés sur l'arête numéro 'Naret'
+	*/
 	if (t==1){
 		if(Naret==1){
 			numPnts_Naret[0] = 1;
@@ -202,6 +242,16 @@ void numNaret(int t, int Naret, int* numPnts_Naret){
 }
 
 void selectPts(int nb, int num[], float *coorEns[], float *coorSel[]) {
+	/*
+	Sélectionne un nombre 'nb' de points donnés dans 'num' parmi l'ensemble des coordonnées 'coorEns'
+
+	En entrée :
+	- nb : nombre de points à sélectionner
+	- num : vecteur des numéros des noeuds qui doivent être sélectionnés
+	- coorEns : vecteur de pointeurs qui renvoie vers les coordonnées des noeuds 
+	En sortie :
+	- coorSel : vecteur de pointeurs qui renvoie vers les coordonnées des noeuds sélectionnés dans 'num'
+	*/
 	for (int i=0; i<nb; i++) {
 		coorSel[i] = coorEns[num[i]-1];
   }
