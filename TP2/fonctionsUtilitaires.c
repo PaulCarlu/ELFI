@@ -16,8 +16,8 @@ void ppquad(int t, float *romega, float **rx){
 	*/
 	if (t==1){
 		for(int k=0;k<3;k++) romega[k] = 1.0/36;
-		for(int k=4;k<7;k++)romega[k] = 1/9;
-		romega[8]= 4/9;
+		for(int k=4;k<7;k++)romega[k] = 1.0/9;
+		romega[8]= 4.0/9;
 
 		rx[0][0] = 1, rx[0][1] = 0;
 		rx[1][0] = 1, rx[1][1] = 1;
@@ -30,13 +30,13 @@ void ppquad(int t, float *romega, float **rx){
 		rx[8][0] = 0.5, rx[8][1] = 0.5;
 	}
 	else if(t==2){
-        for(int k=0;k<3;k++){ romega[k] = 1/6; }
+        for(int k=0;k<3;k++){ romega[k] = 1.0/6; }
         rx[0][0] = 0.5, rx[0][1] = 0.5;
         rx[1][0] = 0, rx[1][1] = 0.5;
         rx[2][0] = 0.5, rx[2][1] = 0;
     }
 	else if(t==3){
-		romega[0] = 1/6, romega[1] = 1/6, romega[2] = 2/3;
+		romega[0] = 1.0/6, romega[1] = 1.0/6, romega[2] = 2.0/3;
         rx[0][0] = 1;
         rx[1][0] = 0;
         rx[2][0] = 0.5;
@@ -119,20 +119,20 @@ void calDerFbase(int t, float* x, float** d_Fbase){
 	}
 }
 
-void transFK(int q, float **a, float *Fbase, float *FK) {
+void transFK(int p, float **a, float *Fbase, float *FK) {
 	/*
 	Calcul l'image d'un point de l'élément de référence par la transformation notée FK :
-	FK = [somme sur i de 1 à q] des (i fonctions de base calculer au point souhaité) * (coordonnées des noeuds géométriques)
+	FK = [somme sur i de 1 à p] des (i fonctions de base calculer au point souhaité) * (coordonnées des noeuds géométriques)
 
 	En entrée : 
-	- q : nombre de poids et points de quadrature (malo : pour moi c'est p le nombre de noeuds géométriques = nb de fonctions de base pour un élément)
+	- p : nombre de noeuds géométriques 
 	- a : matrice contenant les coordonnées des noeuds géométriques
 	- Fbase : vecteur des valeurs des fonctions de base au point souhaité
 	En sortie :
 	- FK : vecteur qui contient le résultat de la transformation 
 	*/
 	FK[0] = 0; FK[1] = 0;
-	for (int i=0; i<q; i++) {
+	for (int i=0; i<p; i++) {
 		FK[0] += Fbase[i]*a[i][0];
 		FK[1] += Fbase[i]*a[i][1];
 	}
