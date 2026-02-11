@@ -1,6 +1,8 @@
 // Carlu Paul - Martin Malo
 //
 #include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
 
 void ppquad(int t, float *romega, float **rx){
 	/*
@@ -13,9 +15,9 @@ void ppquad(int t, float *romega, float **rx){
 	- rx : matrice de coordonnées des points de quadrature
 	*/
 	if (t==1){
-		for(int k=0;k<3;k++){romega[k] = 1.0/36;}
-		for(int k=4;k<7;k++){romega[k] = 1.0/9;}
-		romega[8]= 4.0/9;
+		for(int k=0;k<3;k++) romega[k] = 1.0/36;
+		for(int k=4;k<7;k++)romega[k] = 1/9;
+		romega[8]= 4/9;
 
 		rx[0][0] = 1, rx[0][1] = 0;
 		rx[1][0] = 1, rx[1][1] = 1;
@@ -28,13 +30,13 @@ void ppquad(int t, float *romega, float **rx){
 		rx[8][0] = 0.5, rx[8][1] = 0.5;
 	}
 	else if(t==2){
-        for(int k=0;k<3;k++){ romega[k] = 1.0/6; }
+        for(int k=0;k<3;k++){ romega[k] = 1/6; }
         rx[0][0] = 0.5, rx[0][1] = 0.5;
         rx[1][0] = 0, rx[1][1] = 0.5;
         rx[2][0] = 0.5, rx[2][1] = 0;
     }
 	else if(t==3){
-		romega[0] = 1.0/6, romega[1] = 1.0/6, romega[2] = 2.0/3;
+		romega[0] = 1/6, romega[1] = 1/6, romega[2] = 2/3;
         rx[0][0] = 1;
         rx[1][0] = 0;
         rx[2][0] = 0.5;
@@ -123,7 +125,7 @@ void transFK(int q, float **a, float *Fbase, float *FK) {
 	FK = [somme sur i de 1 à q] des (i fonctions de base calculer au point souhaité) * (coordonnées des noeuds géométriques)
 
 	En entrée : 
-	- q : nombre de poids et points de quadrature
+	- q : nombre de poids et points de quadrature (malo : pour moi c'est p le nombre de noeuds géométriques = nb de fonctions de base pour un élément)
 	- a : matrice contenant les coordonnées des noeuds géométriques
 	- Fbase : vecteur des valeurs des fonctions de base au point souhaité
 	En sortie :
@@ -146,7 +148,7 @@ void matJacob(int d, int p, float** coordFK, float** d_Fbase, float** JacFK){
 	- coordFK : matrice des coordonnées des noeuds géométriques
 	- d_Fbase : matrices des valeurs des dérivées des fonctions de base au point souhaité
 	En sortie : 
-	- JacFK : matrice contenant la jacobienne de la transformation FK
+	- JacFK : matrice contenant la jacobienne de la transformation FK au point souhaité
 	*/
 	if (d == 1){
 		JacFK[0][0] = 0;
@@ -183,7 +185,7 @@ void invertM2x2(float** A, float** InvA, float det){
 	det = A[0][0]*A[1][1] - A[1][0]*A[0][1];
     // Critère d'inversibilité : 1e-10
 	if(fabs(det)<0.0000000001){
-		printf("Le déterminant vaut en valeur absolue : \f <1e-10",&det);
+		printf("Le déterminant vaut en valeur absolue : %f <1e-10",det);
 		printf("C'est trop proche de 0 pour que la matrice soit considérée comme inversible");
 		exit(EXIT_FAILURE);
 	}
