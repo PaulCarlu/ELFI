@@ -6,10 +6,10 @@
 void W(int nbneel, float *Fbase, float eltdif, float cofvar, float *vecelm) {
     /*
     Calcul de 
-        A00*Fbase_i*Fbase_j
+        FOMEGA*Fbase_i
     et 
-        BN*Fbase_i*Fbase_j
-    où A00 et BN sont rerésentés par cofvar
+        FN*Fbase_i
+    où FOMEGA et FN sont rerésentées par cofvar
     
     En entrée :
     - nbneel : nombre de noeuds de l'élément
@@ -32,7 +32,7 @@ void WW(int nbneel, float *Fbase, float eltdif, float cofvar, float **matelm) {
         A00*Fbase_i*Fbase_j
     et 
         BN*Fbase_i*Fbase_j
-    où A00 et BN sont rerésentés par cofvar
+    où A00 et BN sont rerésentées par cofvar
     
     En entrée :
     - nbneel : nombre de noeuds de l'élément
