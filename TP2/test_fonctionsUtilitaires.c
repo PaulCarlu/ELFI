@@ -7,10 +7,7 @@
 
 
 int main(){
-
-
     //Test de ppquad dans le cas d'un carré
-
     int t = 1;
     float* romega = malloc(9*sizeof(float));
     float** rx = allocmatFLOAT(9,2);
