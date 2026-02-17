@@ -103,7 +103,7 @@ void calDerFbase(int t, float* x, float** d_Fbase){
 		d_Fbase[2][0] = -x[1];
 		d_Fbase[2][1] = 1 - x[0];
 		d_Fbase[3][0] = -1 + x[1];
-		d_Fbase[3][1] = 1 + x[0];
+		d_Fbase[3][1] = -1 + x[0];
 	}
 	else if (t==2){
 		d_Fbase[0][0] = 1;
@@ -127,7 +127,8 @@ void transFK(int p, float **a, float *Fbase, float *FK) {
 	En entrée : 
 	- p : nombre de noeuds géométriques 
 	- a : matrice contenant les coordonnées des noeuds géométriques
-	- Fbase : vecteur des valeurs des fonctions de base au point souhaité
+	- Fbase
+	d : vecteur des valeurs des fonctions de base au point souhaité
 	En sortie :
 	- FK : vecteur qui contient le résultat de la transformation 
 	*/
@@ -138,14 +139,14 @@ void transFK(int p, float **a, float *Fbase, float *FK) {
 	}
 }
 
-void matJacob(int d, int p, float** coordFK, float** d_Fbase, float** JacFK){
+void matJacob(int d, int p, float** coordnK, float** d_Fbase, float** JacFK){
 	/*
 	Calcul la matrice jacobienne de la transformation FK
 
 	En entrée :
 	- d : dimension de l'ensemble de départ de FK (1 segment, 2 triangle/quadrangle)
 	- p : nombre de fonctions de bases
-	- coordFK : matrice des coordonnées des noeuds géométriques
+	- coordnK : matrice des coordonnées des noeuds géométriques (a dans la fonction précédente)
 	- d_Fbase : matrices des valeurs des dérivées des fonctions de base au point souhaité
 	En sortie : 
 	- JacFK : matrice contenant la jacobienne de la transformation FK au point souhaité
@@ -154,8 +155,8 @@ void matJacob(int d, int p, float** coordFK, float** d_Fbase, float** JacFK){
 		JacFK[0][0] = 0;
 		JacFK[1][0] = 0;
 		for (int i=0; i<p; i++){
-			JacFK[0][0] += d_Fbase[i][0]*coordFK[i][0];
-			JacFK[1][0] += d_Fbase[i][0]*coordFK[i][1];
+			JacFK[0][0] += d_Fbase[i][0]*coordnK[i][0];
+			JacFK[1][0] += d_Fbase[i][0]*coordnK[i][1];
 		}
 	}
 	else if (d == 2){
@@ -164,15 +165,15 @@ void matJacob(int d, int p, float** coordFK, float** d_Fbase, float** JacFK){
 		JacFK[1][0] = 0;
 		JacFK[1][1] = 0;
 		for (int i=0; i<p; i++){
-			JacFK[0][0] += d_Fbase[i][0]*coordFK[i][0];
-			JacFK[0][1] += d_Fbase[i][1]*coordFK[i][0];
-			JacFK[1][0] += d_Fbase[i][0]*coordFK[i][1];
-			JacFK[1][1] += d_Fbase[i][1]*coordFK[i][1];
+			JacFK[0][0] += d_Fbase[i][0]*coordnK[i][0];
+			JacFK[0][1] += d_Fbase[i][1]*coordnK[i][0];
+			JacFK[1][0] += d_Fbase[i][0]*coordnK[i][1];
+			JacFK[1][1] += d_Fbase[i][1]*coordnK[i][1];
 		}
 	}
 }
 
-void invertM2x2(float** A, float** InvA, float det){
+void invertM2x2(float** A, float** InvA, float* p_det){
 	/*
 	Renvoie le déterminant d'une matrice de taille 2x2 ainsi que son inverse
 
@@ -182,15 +183,15 @@ void invertM2x2(float** A, float** InvA, float det){
 	- InvA : matrice inverse de A
 	- det : déterminant de la matrice A
 	*/
-	det = A[0][0]*A[1][1] - A[1][0]*A[0][1];
+	*p_det = A[0][0]*A[1][1] - A[1][0]*A[0][1];
     // Critère d'inversibilité : 1e-10
-	if(fabs(det)<0.0000000001){
-		printf("Le déterminant vaut en valeur absolue : %f <1e-10",det);
+	if(fabs(*p_det)<0.0000000001){
+		printf("Le déterminant vaut en valeur absolue : %f <1e-10",*p_det);
 		printf("C'est trop proche de 0 pour que la matrice soit considérée comme inversible");
 		exit(EXIT_FAILURE);
 	}
 	else{
-		float invDet = 1/det;
+		float invDet = 1/(*p_det);
 		InvA[0][0] = invDet*A[1][1];
 		InvA[0][1] = -invDet*A[0][1];
 		InvA[1][0] = -invDet*A[1][0];
@@ -243,7 +244,7 @@ void numNaret(int t, int Naret, int* numPnts_Naret){
 	}
 }
 
-void selectPts(int nb, int num[], float *coorEns[], float *coorSel[]) {
+void selectPts(int nb, int* num, float *coorEns[], float *coorSel[]) {
 	/*
 	Sélectionne un nombre 'nb' de points donnés dans 'num' parmi l'ensemble des coordonnées 'coorEns'
 
