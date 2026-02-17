@@ -244,7 +244,7 @@ void numNaret(int t, int Naret, int* numPnts_Naret){
 	}
 }
 
-void selectPts(int nb, int* num, float **coorEns, float **coorSel) {
+void selectPts(int nb, int* num, float *coorEns[], float *coorSel[]) {
 	/*
 	Sélectionne un nombre 'nb' de points donnés dans 'num' parmi l'ensemble des coordonnées 'coorEns'
 

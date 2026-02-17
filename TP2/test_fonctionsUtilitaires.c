@@ -42,6 +42,7 @@ int main(){
     // Calcul des valeurs au point de coordonnées (1,1) par les dérivées des fonctions de base de l'élément de réf
     float** d_Fbase_x = allocmatFLOAT(4,2);
     calDerFbase(t,x,d_Fbase_x);
+    free(x);
 
     // Affichage
     printf("\n Valeurs des dérivées des fonctions de base du quadrangle de référence au poitn de coordonnées (1,1) :\n");
@@ -66,11 +67,15 @@ int main(){
     int d = 2;
     float** JacFK = allocmatFLOAT(2,d);
     matJacob(d,p,a,d_Fbase_x,JacFK);
+    freematFLOAT(a);
 
     // Affichage
     printf(" JacFK(x) : \n");
     printmatFloat(JacFK,2,d);
-
+    freematFLOAT(JacFK);
+    free(FK_x);
+    free(Fbase_x);
+    freematFLOAT(d_Fbase_x);
 
     // Inversion de la matrice homothétie de rapport 2
     float** A = allocmatFLOAT(2,2);
@@ -84,6 +89,8 @@ int main(){
     printf("Inverse de l'homothétie de rapport 2 :\n");
     printmatFloat(InvA,2,2);
     printf("\n déterminant de A = %f",det);
+    freematFLOAT(A);
+    freematFLOAT(InvA);
 
 
     // Liste des numéros associés à une arrête sur l'élément de référence
@@ -93,7 +100,7 @@ int main(){
 
     // Affichage
     printf("\n Les numéros locaux associés à l'arrête numéro 3 du quadrangle sont : %d %d \n",numPnts_aret3[0],numPnts_aret3[1]);
-
+    free(numPnts_aret3);
 
     // Sélection de coordonnées dans l'ensemble des coordonnées
     int nb = 2;
@@ -112,21 +119,17 @@ int main(){
     selectPts(nb,num,coorEns,coorSel);
 
     // Affichage
+    for( int i =0; i < 2 ;i ++) {
+        for (int j =0; j < 2 ;j ++) {
+            printf (" %f ", coorSel [i][j]) ;
+                }
+        }
+    printf("\nLes coordonnées séléctionnées sont :\n");
     printmatFloat(coorSel,2,2);
+    
 
     // Free
-    free(x);
-    freematFLOAT(a);
-    freematFLOAT(JacFK);
-    free(FK_x);
-    free(Fbase_x);
-    freematFLOAT(d_Fbase_x);
-    freematFLOAT(A);
-    freematFLOAT(InvA);
-    free(numPnts_aret3);
     free(num);
     freematFLOAT(coorEns);
-    freematFLOAT(coorSel);
-
     return 0;
 }
