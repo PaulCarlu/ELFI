@@ -119,21 +119,20 @@ void calDerFbase(int t, float* x, float** d_Fbase){
 	}
 }
 
-void transFK(int p, float **a, float *Fbase, float *FK) {
+void transFK(int nbneel, float **a, float *Fbase, float *FK) {
 	/*
 	Calcul l'image d'un point de l'élément de référence par la transformation notée FK :
-	FK = [somme sur i de 1 à p] des (i fonctions de base calculer au point souhaité) * (coordonnées des noeuds géométriques)
+	FK = [somme sur i de 1 à nbneel] des (i fonctions de base calculer au point souhaité) * (coordonnées des noeuds géométriques)
 
 	En entrée : 
-	- p : nombre de noeuds géométriques 
+	- nbneel : nombre de noeuds géométriques 
 	- a : matrice contenant les coordonnées des noeuds géométriques
-	- Fbase
-	d : vecteur des valeurs des fonctions de base au point souhaité
+	- Fbase : vecteur des valeurs des fonctions de base au point souhaité
 	En sortie :
 	- FK : vecteur qui contient le résultat de la transformation 
 	*/
 	FK[0] = 0; FK[1] = 0;
-	for (int i=0; i<p; i++) {
+	for (int i=0; i<nbneel; i++) {
 		FK[0] += Fbase[i]*a[i][0];
 		FK[1] += Fbase[i]*a[i][1];
 	}
