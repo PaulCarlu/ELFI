@@ -11,9 +11,9 @@ float intElem(int t,float** coorEl){
     if (t==3){nbneel=2;}
     
     int q = valq(t);
-    float* omegaquad[q];
+    float omegaquad[q];
     int dim = t==3?1:2;
-    float** xquad[q][dim];
+    float xquad[q][dim];
     ppquad(t,omegaquad,xquad);
     
     for (int i=0;i<q;i++){
