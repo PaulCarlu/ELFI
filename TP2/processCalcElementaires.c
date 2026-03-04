@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-float intElem(int t,float** coorEl){
+void intElem(int t,float** coorEl){
 
     int nbneel;
     if (t==1){nbneel=4;}
