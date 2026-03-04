@@ -32,8 +32,8 @@ float intElem(int t,float** coorEl){
 
         float** DerParFbase[nbneel][2];
         for(int i=0;i<nbneel;i++){
-            DerParFbase[i][0] = calDerFbase[i][0]*InvJacFK_x[0][0] + calDerFbase[i][1]*InvJacFK_x[1][0];
-            DerParFbase[i][1] = calDerFbase[i][0]*InvJacFK_x[0][1] + calDerFbase[i][1]*InvJacFK_x[1][1];
+            DerParFbase[i][0] = calDerFbase_x[i][0]*InvJacFK_x[0][0] + calDerFbase_x[i][1]*InvJacFK_x[1][0];
+            DerParFbase[i][1] = calDerFbase_x[i][0]*InvJacFK_x[0][1] + calDerFbase_x[i][1]*InvJacFK_x[1][1];
         }
     }
 
