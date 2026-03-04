@@ -3,9 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void (int nbneel,float** matelem, float* vecelem, float** MatElem, float* SMbrElem){
-
-
+void cal1Elem(int nbneel, float** matelem, float* vecelem, float** MatElem, float* SMbrElem){
 
     for(int j=0; j<nbneel; j++){
         for(int i=0;i<nbneel;i++){
