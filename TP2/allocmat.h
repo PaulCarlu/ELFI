@@ -1,3 +1,5 @@
+// Carlu Paul - Martin Malo
+//
 float **allocmatFLOAT(int,int);
 int **allocmatINT(int,int);
 void printmatFloat(float**,int,int);

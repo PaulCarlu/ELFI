@@ -5,6 +5,7 @@
 #include <math.h>
 #include "fonctionsUtilitaires.h"
 #include "fonctionsDef.h"
+#include "integralesElementaires.h"
 
 void intElem(int t,float** coorEl, float **matelm, float *vecelm){
     // Nombre de noeuds géométrique
@@ -51,7 +52,7 @@ void intElem(int t,float** coorEl, float **matelm, float *vecelm){
         // Appel de ADWDW
         float cofvarADWDW[2][2];
         cofvarADWDW[0][0] = A11(xquad[i]); cofvarADWDW[0][1] = A12(xquad[i]);
-        cofvarADWDW[1][0] = A21(xquad[i]); cofvarADWDW[1][1] = A22(xquad[i]);
+        cofvarADWDW[1][0] = A12(xquad[i]); cofvarADWDW[1][1] = A22(xquad[i]);
         float DerParFbase[nbneel][2];
         for(int i=0;i<nbneel;i++){
             DerParFbase[i][0] = DerFbase_x[i][0]*InvJacFK_x[0][0] + DerFbase_x[i][1]*InvJacFK_x[1][0];

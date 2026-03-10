@@ -1,4 +1,4 @@
-   // Carlu Paul - Martin Malo
+// Carlu Paul - Martin Malo
 //
 #include <stdlib.h>
 #include <stdio.h>

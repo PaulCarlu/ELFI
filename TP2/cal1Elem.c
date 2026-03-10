@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include "processCalcElementaires.h"
 
-void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int numRefD0, int nbRefD1, int numRefD1, int nbRefF1, int numRefF1, int typEL,
-              float** coorEl, int nbaret, int** nRefArEl, float** MatElem, float* SMbrElem, int* NuDElem, int* uDElem){
+void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int* numRefD0, int nbRefD1, int* numRefD1, int nbRefF1, int* numRefF1, int typEl,
+              float** coorEl, int nbaret, int* nRefArEl, float** MatElem, float* SMbrElem, int* NuDElem, int* uDElem){
   
   /* MatElem et SMbrElem */
   float matelm[nbneel][nbneel];
