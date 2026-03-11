@@ -3,15 +3,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "processCalcElementaires.h"
+#include "../TP1/allocmat.h"
 
 void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int* numRefD0, int nbRefD1, int* numRefD1, int nbRefF1, int* numRefF1, int typEl,
-              float** coorEl, int nbaret, int* nRefArEl, float** MatElem, float* SMbrElem, int* NuDElem, int* uDElem){
+              float** coorEl, int nbaret, int* nRefArEl, float** MatElem, float* SMbrElem, int* NuDElem, float* uDElem){
   
   /* MatElem et SMbrElem */
-  float matelm[nbneel][nbneel];
+  float **matelm = allocmatFLOAT(nbneel,nbneel);
   float vecelm[nbneel];
+  for(int i=0; i<nbneel; i++) {
+    for(int j=0; j<nbneel; j++) {
+      matelm[i][j] = 0;
+    }
+    vecelm[i] = 0;
+  }
   // Appel de intElem pour remplir matelm et vecelm
-  intElem(nbneel,coorEl,matelm,vecelm);
+  intElem(typEl,coorEl,matelm,vecelm);
 
   for(int i=0; i<nbneel; i++) {
     for(int j=0; j<nbneel; j++) {
@@ -25,6 +32,8 @@ void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int* numRefD0, int nbRefD1, 
     NuDElem[i] = 0;
     uDElem[i] = 0;
   }
+
+  freematFLOAT(matelm);
 }
 
 void impCalEl(int K, int typEl, int nbneel, float **MatElem, float *SMbrElem,

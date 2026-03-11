@@ -5,8 +5,9 @@
 #include "cal1Elem.h"
 #include "fonctionsUtilitaires.h"
 #include "../TP1/lecfima.h"
+#include "../TP1/allocmat.h"
 
-//
+// Depuis le dossier TP2 :
 // gcc main.c cal1Elem.c fonctionsUtilitaires.c processCalcElementaires.c integralesElementaires.c fonctionsDef.c ../TP1/lecfima.c ../TP1/allocmat.c -lm
 //
 
@@ -42,8 +43,10 @@ int main() {
     - NuDElem : vecteur des noeuds porteurs d'une condition de Dirichlet
     - uDElem : vecteurs des valeurs portées par ces noeuds avec une condition de Dirichlet
     */
-    float MatElem[nbneel][nbneel], SMbrElem[nbneel], **coorEl;
-    int NuDElem[nbneel], uDElem[nbneel], nRefArEl[nbneel];
+    float **MatElem = allocmatFLOAT(nbneel,nbneel);
+    float **coorEl = allocmatFLOAT(nbneel,2);
+    float SMbrElem[nbneel], uDElem[nbneel];
+    int NuDElem[nbneel], nRefArEl[nbneel];
     int *numRefD0, *numRefD1, *numRefF1;
     int nRefDom, nbRefD0, nbRefD1, nbRefF1;
 
@@ -64,5 +67,9 @@ int main() {
         impCalEl(K+1,typEl,nbneel,MatElem,SMbrElem,NuDElem,uDElem);
     }
 
+    freematFLOAT(MatElem);
+    freematFLOAT(coord);
+    freematINT(ngnel);
+    freematINT(nRefAr);
     return 0;
 }

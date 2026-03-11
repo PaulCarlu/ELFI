@@ -77,7 +77,7 @@ void calFbase(int t, float* x, float* Fbase){
 	else if (t==2){
 		Fbase[0] = x[0];
 		Fbase[1] = x[1];
-		Fbase[2] = 1 - x[0]*x[1];
+		Fbase[2] = 1 - x[0] - x[1];
 	}
 	else if (t==3){
 		Fbase[0] = x[0];
@@ -110,8 +110,8 @@ void calDerFbase(int t, float* x, float** d_Fbase){
 		d_Fbase[0][1] = 0;
 		d_Fbase[1][0] = 0;
 		d_Fbase[1][1] = 1;
-		d_Fbase[2][0] = -x[1];
-		d_Fbase[2][1] = -x[0];
+		d_Fbase[2][0] = -1;
+		d_Fbase[2][1] = -1;
 	}
 	else if (t==3){
 		d_Fbase[0][0] = 1;
@@ -185,8 +185,8 @@ void invertM2x2(float** A, float** InvA, float* p_det){
 	*p_det = A[0][0]*A[1][1] - A[1][0]*A[0][1];
     // Critère d'inversibilité : 1e-10
 	if(fabs(*p_det)<0.0000000001){
-		printf("Le déterminant vaut en valeur absolue : %f <1e-10",*p_det);
-		printf("C'est trop proche de 0 pour que la matrice soit considérée comme inversible");
+		printf("Le déterminant vaut en valeur absolue : %f <1e-10\n",*p_det);
+		printf("C'est trop proche de 0 pour que la matrice soit considérée comme inversible\n");
 		exit(EXIT_FAILURE);
 	}
 	else{
