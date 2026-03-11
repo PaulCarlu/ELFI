@@ -68,3 +68,50 @@ void intElem(int t,float** coorEl, float **matelm, float *vecelm){
     freematFLOAT(cofvarADWDW);
     freematFLOAT(DerParFbase);
 }
+
+void intAret(float** coorAr, float **mataret, float *vecaret){
+
+    // Nombre de noeuds géométrique
+    int nbneel = 2;
+
+
+    // Points et poids de quadrature
+    int q = 3 ;
+    float omegaquad[q];
+    float** xquad = allocmatFLOAT(q,0);
+    ppquad(t,omegaquad,xquad);
+
+    // Initialisation avant la boucle
+    float Fbase_x[nbneel], FK_x[2], det, eltdif, cofvarW;
+    float **DerFbase_x = allocmatFLOAT(nbneel,2);
+    float **JacFK_x = allocmatFLOAT(2,2);
+    float normeJaFk_x;
+    
+    for (int i=0;i<q;i++){
+        // Fonctions de base et dérivées
+        calFbase(t,xquad[i],Fbase_x);
+        calDerFbase(t,xquad[i],DerFbase_x);
+        
+        // Point de quadrature courant dans l'élément courant
+        transFK(nbneel, coorEl, Fbase_x, FK_x);
+
+        // Jacobienne et son inverse
+        matJacob(dim, nbneel, coorEl, DerFbase_x, JacFK_x);// matJacob prend en charge la dimension 1
+        normeJaFk_x = sqrt(fabs( pow(JacFK_x[0][0],2) + pow(JacFK_x[1][0],2) )); // Norme euclidienne de la Jacobienne
+
+        eltdif = normeJaFk_x*omegaquad[i];
+
+        // Appel de W
+        cofvarW = FN(xquad[i]);
+        W(nbneel,Fbase_x,eltdif,cofvarW,vecaret);
+
+        // Appel de WW
+        cofvarW = BN(xquad[i]);
+        WW(nbneel,Fbase_x,eltdif,cofvarW,mataret);
+
+        
+    }
+    freematFLOAT(xquad);
+    freematFLOAT(DerFbase_x);
+    freematFLOAT(JacFK_x);
+}
