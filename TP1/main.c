@@ -1,11 +1,12 @@
 // Carlu Paul - Martin Malo
 //
-// gcc allocmat.c maillage.c main.c -o executable
+// gcc allocmat.c maillage.c lecfima.c main.c -o executable
 //
 #include <stdio.h>
 #include <stdlib.h>
 #include "maillage.h"
 #include "allocmat.h"
+#include "lecfima.h"
 
 int main() {
     /* Création de 3 maillages */

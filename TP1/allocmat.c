@@ -35,6 +35,25 @@ int **allocmatINT(int nrow, int ncol) {
     return mat;
 }
 
+void printmatFloat (float** ppA , int nrow ,int ncol ){
+    for( int i =0; i < nrow ;i ++) {
+        for (int j =0; j < ncol ;j ++) {
+            printf (" %f ", ppA [i][j]) ;
+        }
+        printf ("\n");
+
+    
+    }
+
+}
+
+void printmatInt (int** ppA , int nrow ,int ncol ){
+    for( int i =0; i < nrow ;i ++) {
+        for (int j =0; j < ncol ;j ++) printf (" %d ", ppA [i ][ j ]) ;
+        printf ("\n");
+    }
+}
+
 void freematFLOAT(float **mat) {
     free(mat[0]);
     free(mat);

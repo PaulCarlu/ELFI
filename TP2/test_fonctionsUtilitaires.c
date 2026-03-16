@@ -2,7 +2,7 @@
 //
 #include <stdio.h>
 #include <stdlib.h>
-#include "allocmat.h"
+#include "../TP1/allocmat.h"
 #include "fonctionsUtilitaires.h"
 
 

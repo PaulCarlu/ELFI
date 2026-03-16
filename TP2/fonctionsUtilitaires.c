@@ -77,7 +77,7 @@ void calFbase(int t, float* x, float* Fbase){
 	else if (t==2){
 		Fbase[0] = x[0];
 		Fbase[1] = x[1];
-		Fbase[2] = 1 - x[0]*x[1];
+		Fbase[2] = 1 - x[0] - x[1];
 	}
 	else if (t==3){
 		Fbase[0] = x[0];
@@ -110,8 +110,8 @@ void calDerFbase(int t, float* x, float** d_Fbase){
 		d_Fbase[0][1] = 0;
 		d_Fbase[1][0] = 0;
 		d_Fbase[1][1] = 1;
-		d_Fbase[2][0] = -x[1];
-		d_Fbase[2][1] = -x[0];
+		d_Fbase[2][0] = -1;
+		d_Fbase[2][1] = -1;
 	}
 	else if (t==3){
 		d_Fbase[0][0] = 1;
@@ -119,21 +119,20 @@ void calDerFbase(int t, float* x, float** d_Fbase){
 	}
 }
 
-void transFK(int p, float **a, float *Fbase, float *FK) {
+void transFK(int nbneel, float **a, float *Fbase, float *FK) {
 	/*
 	Calcul l'image d'un point de l'élément de référence par la transformation notée FK :
-	FK = [somme sur i de 1 à p] des (i fonctions de base calculer au point souhaité) * (coordonnées des noeuds géométriques)
+	FK = [somme sur i de 1 à nbneel] des (i fonctions de base calculer au point souhaité) * (coordonnées des noeuds géométriques)
 
 	En entrée : 
-	- p : nombre de noeuds géométriques 
+	- nbneel : nombre de noeuds géométriques 
 	- a : matrice contenant les coordonnées des noeuds géométriques
-	- Fbase
-	d : vecteur des valeurs des fonctions de base au point souhaité
+	- Fbase : vecteur des valeurs des fonctions de base au point souhaité
 	En sortie :
 	- FK : vecteur qui contient le résultat de la transformation 
 	*/
 	FK[0] = 0; FK[1] = 0;
-	for (int i=0; i<p; i++) {
+	for (int i=0; i<nbneel; i++) {
 		FK[0] += Fbase[i]*a[i][0];
 		FK[1] += Fbase[i]*a[i][1];
 	}
@@ -186,8 +185,8 @@ void invertM2x2(float** A, float** InvA, float* p_det){
 	*p_det = A[0][0]*A[1][1] - A[1][0]*A[0][1];
     // Critère d'inversibilité : 1e-10
 	if(fabs(*p_det)<0.0000000001){
-		printf("Le déterminant vaut en valeur absolue : %f <1e-10",*p_det);
-		printf("C'est trop proche de 0 pour que la matrice soit considérée comme inversible");
+		printf("Le déterminant vaut en valeur absolue : %f <1e-10\n",*p_det);
+		printf("C'est trop proche de 0 pour que la matrice soit considérée comme inversible\n");
 		exit(EXIT_FAILURE);
 	}
 	else{
