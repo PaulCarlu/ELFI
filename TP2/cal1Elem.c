@@ -5,6 +5,7 @@
 #include "processCalcElementaires.h"
 #include "fonctionsUtilitaires.h"
 #include "../TP1/allocmat.h"
+#include "fonctionsDef.h"
 
 void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int* numRefD0, int nbRefD1, int* numRefD1, int nbRefF1, int* numRefF1, int typEl,
               float** coorEl, int nbaret, int* nRefArEl, float** MatElem, float* SMbrElem, int* NuDElem, float* uDElem){
@@ -34,8 +35,43 @@ void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int* numRefD0, int nbRefD1, 
     uDElem[i] = 0;
   }
   
+  int numPnts_Naret[2];
+  for(int i=0;i<nbaret;i++){
+    numNaret(typEl,i+1,numPnts_Naret);
+    for(int j=0;j<nbRefD0;j++){
+      if(nRefArEl[i]==nbRefD0[j]){
+        NuDElem[numPnts_Naret[0]] = 0;
+        NuDElem[numPnts_Naret[1]] = 0;
+      }
+    }
+
+    for(int j=0;j<nbRefD1;j++){
+      if(nRefArEl[i]==nbRefD1[j]){
+        NuDElem[numPnts_Naret[0]] = -1;
+        uDElem[numPnts_Naret[0]] = UD(coorEl[numPnts_Naret[0]]);
+        NuDElem[numPnts_Naret[1]] = -1;
+        uDElem[numPnts_Naret[1]] = UD(coorEl[numPnts_Naret[1]]);
+      }
+    }
+    
+  }
+
+  float **mataret = allocmatFLOAT(2,2);
+  float *vecaret;
+  for(int i=0; i<2;i++) {
+    mataret[i][0] = 0;
+    mataret[i][1] = 0;
+    vecaret[i] = 0;
+  }
+
+  for(int i=0; i<nbneel; i++) {
+    if(NuDElem[i] == 1) {
+      intAret(coorAr,mataret,vecaret);
+    }
+  }
 
   freematFLOAT(matelm);
+  freematFLOAT(mataret);
 }
 
 void impCalEl(int K, int typEl, int nbneel, float **MatElem, float *SMbrElem,

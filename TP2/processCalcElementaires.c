@@ -73,13 +73,13 @@ void intAret(float** coorAr, float **mataret, float *vecaret){
 
     // Nombre de noeuds géométrique
     int nbneel = 2;
-
+    int typEl = 3;
 
     // Points et poids de quadrature
     int q = 3 ;
     float omegaquad[q];
-    float** xquad = allocmatFLOAT(q,0);
-    ppquad(t,omegaquad,xquad);
+    float** xquad = allocmatFLOAT(q,1);
+    ppquad(typEl,omegaquad,xquad);
 
     // Initialisation avant la boucle
     float Fbase_x[nbneel], FK_x[2], det, eltdif, cofvarW;
@@ -89,14 +89,14 @@ void intAret(float** coorAr, float **mataret, float *vecaret){
     
     for (int i=0;i<q;i++){
         // Fonctions de base et dérivées
-        calFbase(t,xquad[i],Fbase_x);
-        calDerFbase(t,xquad[i],DerFbase_x);
+        calFbase(typEl,xquad[i],Fbase_x);
+        calDerFbase(typEl,xquad[i],DerFbase_x);
         
         // Point de quadrature courant dans l'élément courant
         transFK(nbneel, coorEl, Fbase_x, FK_x);
 
         // Jacobienne et son inverse
-        matJacob(dim, nbneel, coorEl, DerFbase_x, JacFK_x);// matJacob prend en charge la dimension 1
+        matJacob(1, nbneel, coorEl, DerFbase_x, JacFK_x);// matJacob prend en charge la dimension 1
         normeJaFk_x = sqrt(fabs( pow(JacFK_x[0][0],2) + pow(JacFK_x[1][0],2) )); // Norme euclidienne de la Jacobienne
 
         eltdif = normeJaFk_x*omegaquad[i];
