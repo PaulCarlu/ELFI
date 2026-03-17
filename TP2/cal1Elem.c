@@ -35,6 +35,7 @@ void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int* numRefD0, int nbRefD1, 
     uDElem[i] = 0;
   }
   
+  /* Initialisation des variables nécessaire pour la boucle */
   int numPnts_Naret[2];
   float **mataret = allocmatFLOAT(2,2);
   float vecaret[2];
@@ -45,15 +46,17 @@ void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int* numRefD0, int nbRefD1, 
   }
   float **coorAr = allocmatFLOAT(2,2);
 
+  /* Boucle sur les arêtes de l'élément courant */
   for(int i=0;i<nbaret;i++){
     numNaret(typEl,i+1,numPnts_Naret);
+    // Attribution des conditions de Dirichlet homogène suivant les arêtes
     for(int j=0;j<nbRefD0;j++){
       if(nRefArEl[i]==numRefD0[j]){
         NuDElem[numPnts_Naret[0]-1] = 0;
         NuDElem[numPnts_Naret[1]-1] = 0;
       }
     }
-
+    // Attribution des conditions de Dirichlet non homogène suivant les arêtes
     for(int j=0;j<nbRefD1;j++){
       if(nRefArEl[i]==numRefD1[j]){
         NuDElem[numPnts_Naret[0]-1] = -1;
@@ -62,9 +65,9 @@ void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int* numRefD0, int nbRefD1, 
         uDElem[numPnts_Naret[1]-1] = UD(coorEl[numPnts_Naret[1]-1]);
       }
     }
-
+    // Calcul avec intAret sur les arêtes avec condition de Neumann/Fourier
     for(int j=0; j<nbRefF1; j++) {
-      if(nRefArEl[i] == numRefF1[j] && i != nbaret-1){
+      if(nRefArEl[i] == numRefF1[j]){
         selectPts(2,numPnts_Naret,coorEl,coorAr); // A voir si jamais avec le prof pour la façon dont est fait numNaret
         intAret(coorAr,mataret,vecaret);
         // MatElem
