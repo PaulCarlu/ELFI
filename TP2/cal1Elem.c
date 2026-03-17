@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "processCalcElementaires.h"
+#include "fonctionsUtilitaires.h"
 #include "../TP1/allocmat.h"
 
 void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int* numRefD0, int nbRefD1, int* numRefD1, int nbRefF1, int* numRefF1, int typEl,
@@ -29,9 +30,10 @@ void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int* numRefD0, int nbRefD1, 
 
   /* NuDElem et uDElem */
   for(int i=0; i<nbneel; i++) {
-    NuDElem[i] = 0;
+    NuDElem[i] = 1;
     uDElem[i] = 0;
   }
+  
 
   freematFLOAT(matelm);
 }
