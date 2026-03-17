@@ -21,11 +21,11 @@ float A00(float* x){
 }
 
 float BN(float* x){
-    return 0;
+    return 1;
 }
 
 float FN(float* x){
-    return 0;
+    return 1;
 }
 
 float FOMEGA(float* x){
@@ -33,5 +33,5 @@ float FOMEGA(float* x){
 }
 
 float UD(float* x){
-    return 0;
+    return 100*x[0] + x[1];
 }

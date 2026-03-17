@@ -52,7 +52,7 @@ int main() {
     int nRefDom = nRefAr[0][0];
     int nbRefD0 = 1; int numRefD0[] = {nRefAr[0][nbneel-1]};
     int nbRefD1 = 1; int numRefD1[] = {nRefAr[0][nbneel-2]};
-    int nbRefF1 = 2; int numRefF1[] = {nRefAr[nbneel-1][nbneel-2], nRefAr[nbneel-1][nbneel-1]};
+    int nbRefF1 = 2; int numRefF1[] = {nRefAr[nbtel-1][nbneel-2], nRefAr[nbtel-1][nbneel-1]};
 
     for (int K=0; K < nbtel; K++) {
         // Assignation des valeurs pour la fonction cal1Elem

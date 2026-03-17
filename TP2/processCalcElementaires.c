@@ -82,7 +82,7 @@ void intAret(float** coorAr, float **mataret, float *vecaret){
     ppquad(typEl,omegaquad,xquad);
 
     // Initialisation avant la boucle
-    float Fbase_x[nbneel], FK_x[2], det, eltdif, cofvarW;
+    float Fbase_x[nbneel], FK_x[2], det, eltdif, cofvar;
     float **DerFbase_x = allocmatFLOAT(nbneel,2);
     float **JacFK_x = allocmatFLOAT(2,2);
     float normeJaFk_x;
@@ -93,21 +93,21 @@ void intAret(float** coorAr, float **mataret, float *vecaret){
         calDerFbase(typEl,xquad[i],DerFbase_x);
         
         // Point de quadrature courant dans l'élément courant
-        transFK(nbneel, coorEl, Fbase_x, FK_x);
+        transFK(nbneel, coorAr, Fbase_x, FK_x);
 
         // Jacobienne et son inverse
-        matJacob(1, nbneel, coorEl, DerFbase_x, JacFK_x);// matJacob prend en charge la dimension 1
+        matJacob(1, nbneel, coorAr, DerFbase_x, JacFK_x);// matJacob prend en charge la dimension 1
         normeJaFk_x = sqrt(fabs( pow(JacFK_x[0][0],2) + pow(JacFK_x[1][0],2) )); // Norme euclidienne de la Jacobienne
 
         eltdif = normeJaFk_x*omegaquad[i];
 
         // Appel de W
-        cofvarW = FN(xquad[i]);
-        W(nbneel,Fbase_x,eltdif,cofvarW,vecaret);
+        cofvar = FN(xquad[i]);
+        W(nbneel,Fbase_x,eltdif,cofvar,vecaret);
 
         // Appel de WW
-        cofvarW = BN(xquad[i]);
-        WW(nbneel,Fbase_x,eltdif,cofvarW,mataret);
+        cofvar = BN(xquad[i]);
+        WW(nbneel,Fbase_x,eltdif,cofvar,mataret);
 
         
     }

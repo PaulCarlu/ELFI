@@ -36,37 +36,46 @@ void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int* numRefD0, int nbRefD1, 
   }
   
   int numPnts_Naret[2];
-  for(int i=0;i<nbaret;i++){
-    numNaret(typEl,i+1,numPnts_Naret);
-    for(int j=0;j<nbRefD0;j++){
-      if(nRefArEl[i]==nbRefD0[j]){
-        NuDElem[numPnts_Naret[0]] = 0;
-        NuDElem[numPnts_Naret[1]] = 0;
-      }
-    }
-
-    for(int j=0;j<nbRefD1;j++){
-      if(nRefArEl[i]==nbRefD1[j]){
-        NuDElem[numPnts_Naret[0]] = -1;
-        uDElem[numPnts_Naret[0]] = UD(coorEl[numPnts_Naret[0]]);
-        NuDElem[numPnts_Naret[1]] = -1;
-        uDElem[numPnts_Naret[1]] = UD(coorEl[numPnts_Naret[1]]);
-      }
-    }
-    
-  }
-
   float **mataret = allocmatFLOAT(2,2);
-  float *vecaret;
+  float vecaret[2];
   for(int i=0; i<2;i++) {
     mataret[i][0] = 0;
     mataret[i][1] = 0;
     vecaret[i] = 0;
   }
+  float **coorAr = allocmatFLOAT(2,2);
 
-  for(int i=0; i<nbneel; i++) {
-    if(NuDElem[i] == 1) {
-      intAret(coorAr,mataret,vecaret);
+  for(int i=0;i<nbaret;i++){
+    numNaret(typEl,i+1,numPnts_Naret);
+    for(int j=0;j<nbRefD0;j++){
+      if(nRefArEl[i]==numRefD0[j]){
+        NuDElem[numPnts_Naret[0]-1] = 0;
+        NuDElem[numPnts_Naret[1]-1] = 0;
+      }
+    }
+
+    for(int j=0;j<nbRefD1;j++){
+      if(nRefArEl[i]==numRefD1[j]){
+        NuDElem[numPnts_Naret[0]-1] = -1;
+        uDElem[numPnts_Naret[0]-1] = UD(coorEl[numPnts_Naret[0]-1]);
+        NuDElem[numPnts_Naret[1]-1] = -1;
+        uDElem[numPnts_Naret[1]-1] = UD(coorEl[numPnts_Naret[1]-1]);
+      }
+    }
+
+    for(int j=0; j<nbRefF1; j++) {
+      if(nRefArEl[i] == numRefF1[j] && i != nbaret-1){
+        selectPts(2,numPnts_Naret,coorEl,coorAr); // A voir si jamais avec le prof pour la façon dont est fait numNaret
+        intAret(coorAr,mataret,vecaret);
+        // MatElem
+        MatElem[numPnts_Naret[0]-1][numPnts_Naret[0]-1] += mataret[0][0];
+        MatElem[numPnts_Naret[0]-1][numPnts_Naret[1]-1] += mataret[0][1];
+        MatElem[numPnts_Naret[1]-1][numPnts_Naret[0]-1] += mataret[1][0];
+        MatElem[numPnts_Naret[1]-1][numPnts_Naret[1]-1] += mataret[1][1];
+        // SMbrElem
+        SMbrElem[numPnts_Naret[0]-1] += vecaret[0];
+        SMbrElem[numPnts_Naret[1]-1] += vecaret[1];
+      }
     }
   }
 
