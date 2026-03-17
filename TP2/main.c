@@ -46,7 +46,7 @@ int main() {
     float **MatElem = allocmatFLOAT(nbneel,nbneel);
     float **coorEl = allocmatFLOAT(nbneel,2);
     float SMbrElem[nbneel], uDElem[nbneel];
-    int NuDElem[nbneel], nRefArEl[nbneel];
+    int NuDElem[nbneel], *nRefArEl;
 
     // Conditons aux bords
     int nRefDom = nRefAr[0][0];
@@ -63,7 +63,7 @@ int main() {
             SMbrElem[i] = 0;
         }
         selectPts(nbneel,ngnel[K],coord,coorEl);
-        // *nRefArEl = nRefAr[K];
+        nRefArEl = nRefAr[K];
 
         // Appel de cal1Elem
         cal1Elem(nbneel,nRefDom,nbRefD0,numRefD0,nbRefD1,numRefD1,nbRefF1,numRefF1,typEl,coorEl,nbaret,nRefArEl,MatElem,SMbrElem,NuDElem,uDElem);
