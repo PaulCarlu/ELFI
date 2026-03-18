@@ -35,15 +35,11 @@ void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int* numRefD0, int nbRefD1, 
     uDElem[i] = 0;
   }
   
+  
   int numPnts_Naret[2];
-  float **mataret = allocmatFLOAT(2,2);
-  float vecaret[2];
-  for(int i=0; i<2;i++) {
-    mataret[i][0] = 0;
-    mataret[i][1] = 0;
-    vecaret[i] = 0;
-  }
-  float **coorAr = allocmatFLOAT(2,2);
+  
+  
+
 
   for(int i=0;i<nbaret;i++){
     numNaret(typEl,i+1,numPnts_Naret);
@@ -64,23 +60,37 @@ void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int* numRefD0, int nbRefD1, 
     }
 
     for(int j=0; j<nbRefF1; j++) {
-      if(nRefArEl[i] == numRefF1[j] && i != nbaret-1){
+
+      float **mataret = allocmatFLOAT(2,2);
+      float vecaret[2];
+      for(int n=0; n<2;n++) {
+        mataret[n][0] = 0;
+        mataret[n][1] = 0;
+        vecaret[n] = 0;
+      }
+
+      if(nRefArEl[i] == numRefF1[j]){
+        float **coorAr = allocmatFLOAT(2,2);
         selectPts(2,numPnts_Naret,coorEl,coorAr); // A voir si jamais avec le prof pour la façon dont est fait numNaret
         intAret(coorAr,mataret,vecaret);
-        // MatElem
-        MatElem[numPnts_Naret[0]-1][numPnts_Naret[0]-1] += mataret[0][0];
-        MatElem[numPnts_Naret[0]-1][numPnts_Naret[1]-1] += mataret[0][1];
-        MatElem[numPnts_Naret[1]-1][numPnts_Naret[0]-1] += mataret[1][0];
-        MatElem[numPnts_Naret[1]-1][numPnts_Naret[1]-1] += mataret[1][1];
-        // SMbrElem
-        SMbrElem[numPnts_Naret[0]-1] += vecaret[0];
-        SMbrElem[numPnts_Naret[1]-1] += vecaret[1];
+
+        
+        for(int k=0;k<2;k++){
+          printf("\n");
+          for(int l=0;l<2;l++){
+            printf(" vecaret[%d] = %f",l,vecaret[l]);
+            MatElem[numPnts_Naret[k]-1][numPnts_Naret[l]-1] =  MatElem[numPnts_Naret[k]-1][numPnts_Naret[l]-1] + mataret[k][l];
+    
+          }
+          SMbrElem[numPnts_Naret[k]-1] += vecaret[k];
+        }
+
+       
       }
+      freematFLOAT(mataret);
     }
   }
-
   freematFLOAT(matelm);
-  freematFLOAT(mataret);
 }
 
 void impCalEl(int K, int typEl, int nbneel, float **MatElem, float *SMbrElem,
