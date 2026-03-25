@@ -2,10 +2,10 @@
 //
 #include <stdio.h>
 #include <stdlib.h>
-#include "cal1Elem.h"
-#include "fonctionsUtilitaires.h"
 #include "../TP1/lecfima.h"
 #include "../TP1/allocmat.h"
+#include "Assemblage.h"
+
 
 
 
@@ -21,7 +21,7 @@ int main() {
     - ngnel : matrice des numéros globaux des éléments
     - nRefAr : matrice des numéros de référence associés aux arrêtes
     */
-    char *ficmai = "maillage.txt";
+    char *ficmai = "../Maillages/car1x1t_1";
     int typEl, nbtng, nbtel, nbneel, nbaret;
     float **coord; 
     int **ngnel, **nRefAr;
@@ -44,7 +44,7 @@ int main() {
     float **MatElem = allocmatFLOAT(nbneel,nbneel);
     float **coorEl = allocmatFLOAT(nbneel,2);
     float SMbrElem[nbneel], uDElem[nbneel];
-    int NuDElem[nbneel], *nRefArEl;
+    int NuDElem[nbneel];
 
     // Conditons aux bords
     int nRefDom = nRefAr[0][0];
@@ -52,42 +52,23 @@ int main() {
     int nbRefD1 = 1; int numRefD1[] = {nRefAr[0][nbneel-2]};
     int nbRefF1 = 2; int numRefF1[] = {nRefAr[nbtel-1][nbneel-2], nRefAr[nbtel-1][nbneel-1]};
 
-    // Nombre de noeuds géométriques
-    int NbLign = nbtng;
+    
+    int NbLign = nbtng; // Nombre de noeuds géométriques
     int* NumDLDir = malloc(NbLign*sizeof(int));
     float* ValDLDir = calloc(NbLign,sizeof(float));
-    float* SecMembre = malloc(NbLign*sizeof(float));
-    float* DiagMat = calloc(NbLign,sizeof(float));
-    int* AdPrCoefLi = malloc(NbLign*sizeof(int));
+    float* SecMembre = calloc(NbLign,sizeof(float));
+    int* AdPrCoefLi = calloc(NbLign,sizeof(int));
+    int nbcoef = 12*(typEl==1)?8:6;
+    float* Matrice = calloc((NbLign+nbcoef),sizeof(float));
+    int* NumCol = malloc(nbcoef*sizeof(int));
+    int* AdSuccLi = malloc(nbcoef*sizeof(int));
     
-    
-    
-    for (int K=0; K < nbtel; K++) {
-        // Assignation des valeurs pour la fonction cal1Elem
-        for (int i=0; i<nbneel; i++) {
-            for (int j=0; j<nbneel; j++) {
-                MatElem[i][j] = 0;
-            }
-            SMbrElem[i] = 0;
-        }
-        selectPts(nbneel,ngnel[K],coord,coorEl);
-        nRefArEl = nRefAr[K];
+    Assemblage(typEl,nbtng,nbtel,nbneel,nbaret,nRefAr,ngnel,coord,MatElem,coorEl,SMbrElem,NuDElem,uDElem,nRefDom,
+                nbRefD0,numRefD0,nbRefD1,numRefD1,nbRefF1,numRefF1,NumDLDir,ValDLDir,SecMembre,Matrice,AdPrCoefLi,
+                NumCol,AdSuccLi );
 
-        // Appel de cal1Elem
-        cal1Elem(nbneel,nRefDom,nbRefD0,numRefD0,nbRefD1,numRefD1,nbRefF1,numRefF1,typEl,coorEl,nbaret,nRefArEl,MatElem,SMbrElem,NuDElem,uDElem);
-        
-        // Boucle incrémentation ValDLDir et NumDLDir
-        for(int i=0;i<nbneel;i++){
-            NumDLDir[ngnel[K][i]] = NuDElem[i]*ngnel[K][i];
-            ValDLDir[ngnel[K][i]] = uDElem[i];
-            DiagMat[ngnel[K][i]] += MatElem[i][i];
-            // assmath prend num globaux I,J, et les adresses des coef triangulaires inf strictes de MatElem
-            // LMatri se construit au fur et à mesure du balayage des matrices elem
+    AFFSMD (NbLign,AdPrCoefLi,NumCol,AdSuccLi,Matrice,SecMembre,NumDLDir,ValDLDir);
 
-
-        }
-        
-    }
 
     freematFLOAT(MatElem);
     freematFLOAT(coord);
@@ -95,5 +76,9 @@ int main() {
     freematINT(nRefAr);
     free(NumDLDir);
     free(ValDLDir);
+    free(Matrice);
+    free(AdPrCoefLi);
+    free(NumCol);
+    free(AdSuccLi);
     return 0;
 }
