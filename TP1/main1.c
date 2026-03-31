@@ -1,6 +1,6 @@
 // Carlu Paul - Martin Malo
 //
-// gcc allocmat.c maillage.c lecfima.c main.c -o executable
+// gcc allocmat.c maillage.c lecfima.c main1.c -o executable
 //
 #include <stdio.h>
 #include <stdlib.h>

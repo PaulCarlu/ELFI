@@ -5,7 +5,7 @@
 #include "../TP2/cal1Elem.h"
 #include "../TP2/fonctionsUtilitaires.h"
 
-    
+void assmat_(int,int,float,int*,int*,int*,float*,float*);
 
 void Assemblage(int typEl, int nbtng, int nbtel, int nbneel, int nbaret,int** nRefAr, int **ngnel,float **coord,
                 float **MatElem, float **coorEl,float* SMbrElem,int* NuDElem,float* uDElem,
@@ -16,7 +16,7 @@ void Assemblage(int typEl, int nbtng, int nbtel, int nbneel, int nbaret,int** nR
     int nbcoef = nbtng*2*((typEl==1)?8:6);
     float* DiagMat = calloc(nbtng,sizeof(float));
     float* LowMat = malloc(nbcoef*sizeof(float));
-    int* NextAd = &LowMat[0];
+    float* NextAd = &(LowMat[0]);
 
     for (int K=0; K < nbtel; K++) {
         // Assignation des valeurs pour la fonction cal1Elem
@@ -33,7 +33,7 @@ void Assemblage(int typEl, int nbtng, int nbtel, int nbneel, int nbaret,int** nR
         cal1Elem(nbneel,nRefDom,nbRefD0,numRefD0,nbRefD1,numRefD1,nbRefF1,numRefF1,typEl,coorEl,nbaret,
                 nRefArEl,MatElem,SMbrElem,NuDElem,uDElem);
         
-        
+    
 
         
         // Boucle incrémentation ValDLDir et NumDLDir
@@ -41,10 +41,26 @@ void Assemblage(int typEl, int nbtng, int nbtel, int nbneel, int nbaret,int** nR
 
             // On fait le choix de commencer l'indentation de I et J avec 1
             int I = ngnel[K][i];
+            
 
             for(int j=0;j<i;j++){   
                 int J = ngnel[K][j];
+            
                 assmat_((I<J)?J:I,(I<J)?I:J,MatElem[i][j],AdPrCoefLi,NumCol,AdSuccLi,LowMat,NextAd);
+
+
+                printf("OK2\n");
+                printf("%f\n",LowMat[0]);
+                printf("%f\n",LowMat[1]);
+                printf("OK2\n");
+                printf("%f\n",LowMat[0]);
+                printf("%f\n",LowMat[1]);
+                printf("OK2\n");
+                printf("%f\n",LowMat[0]);
+                printf("%f\n",LowMat[1]);
+         
+            
+
             }
 
 
@@ -52,10 +68,11 @@ void Assemblage(int typEl, int nbtng, int nbtel, int nbneel, int nbaret,int** nR
             ValDLDir[I-1] = uDElem[i];
             DiagMat[I-1] += MatElem[i][i];
             SecMembre[I-1] += SMbrElem[i];
+            printf("RAS\n");
             
 
         }
-        
+   
     }
 
     for(int i=0;i<nbtng;i++){

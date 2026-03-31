@@ -2,12 +2,14 @@
 //
 #include <stdio.h>
 #include <stdlib.h>
+#include "cal1Elem.h"
+#include "fonctionsUtilitaires.h"
 #include "../TP1/lecfima.h"
 #include "../TP1/allocmat.h"
-#include "Assemblage.h"
 
-
-
+// Depuis le dossier TP2 :
+// gcc main2.c cal1Elem.c fonctionsUtilitaires.c processCalcElementaires.c integralesElementaires.c fonctionsDef.c ../TP1/lecfima.c ../TP1/allocmat.c -lm
+//
 
 int main() {
     // Utilisation de lecfima pour charger le fichier de maillage
@@ -21,7 +23,7 @@ int main() {
     - ngnel : matrice des numéros globaux des éléments
     - nRefAr : matrice des numéros de référence associés aux arrêtes
     */
-    char *ficmai = "../Maillages/car1x1t_1";
+    char *ficmai = "maillage.txt";
     int typEl, nbtng, nbtel, nbneel, nbaret;
     float **coord; 
     int **ngnel, **nRefAr;
@@ -44,41 +46,35 @@ int main() {
     float **MatElem = allocmatFLOAT(nbneel,nbneel);
     float **coorEl = allocmatFLOAT(nbneel,2);
     float SMbrElem[nbneel], uDElem[nbneel];
-    int NuDElem[nbneel];
+    int NuDElem[nbneel], *nRefArEl;
 
     // Conditons aux bords
     int nRefDom = nRefAr[0][0];
     int nbRefD0 = 1; int numRefD0[] = {nRefAr[0][nbneel-1]};
     int nbRefD1 = 1; int numRefD1[] = {nRefAr[0][nbneel-2]};
     int nbRefF1 = 2; int numRefF1[] = {nRefAr[nbtel-1][nbneel-2], nRefAr[nbtel-1][nbneel-1]};
-
     
-    int NbLign = nbtng; // Nombre de noeuds géométriques
-    int* NumDLDir = malloc(NbLign*sizeof(int));
-    float* ValDLDir = calloc(NbLign,sizeof(float));
-    float* SecMembre = calloc(NbLign,sizeof(float));
-    int* AdPrCoefLi = calloc(NbLign,sizeof(int));
-    int nbcoef = 12*(typEl==1)?8:6;
-    float* Matrice = calloc((NbLign+nbcoef),sizeof(float));
-    int* NumCol = malloc(nbcoef*sizeof(int));
-    int* AdSuccLi = malloc(nbcoef*sizeof(int));
-    
-    Assemblage(typEl,nbtng,nbtel,nbneel,nbaret,nRefAr,ngnel,coord,MatElem,coorEl,SMbrElem,NuDElem,uDElem,nRefDom,
-                nbRefD0,numRefD0,nbRefD1,numRefD1,nbRefF1,numRefF1,NumDLDir,ValDLDir,SecMembre,Matrice,AdPrCoefLi,
-                NumCol,AdSuccLi );
+    for (int K=0; K < nbtel; K++) {
+        // Assignation des valeurs pour la fonction cal1Elem
+        for (int i=0; i<nbneel; i++) {
+            for (int j=0; j<nbneel; j++) {
+                MatElem[i][j] = 0;
+            }
+            SMbrElem[i] = 0;
+        }
+        selectPts(nbneel,ngnel[K],coord,coorEl);
+        nRefArEl = nRefAr[K];
 
-    AFFSMD (NbLign,AdPrCoefLi,NumCol,AdSuccLi,Matrice,SecMembre,NumDLDir,ValDLDir);
-
+        // Appel de cal1Elem
+        cal1Elem(nbneel,nRefDom,nbRefD0,numRefD0,nbRefD1,numRefD1,nbRefF1,numRefF1,typEl,coorEl,nbaret,nRefArEl,MatElem,SMbrElem,NuDElem,uDElem);
+        
+        // Appel de impCalEl pour vérifier les calculs
+        impCalEl(K+1,typEl,nbneel,MatElem,SMbrElem,NuDElem,uDElem);
+    }
 
     freematFLOAT(MatElem);
     freematFLOAT(coord);
     freematINT(ngnel);
     freematINT(nRefAr);
-    free(NumDLDir);
-    free(ValDLDir);
-    free(Matrice);
-    free(AdPrCoefLi);
-    free(NumCol);
-    free(AdSuccLi);
     return 0;
 }
