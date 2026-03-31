@@ -5,8 +5,8 @@
 #include "../TP1/lecfima.h"
 #include "../TP1/allocmat.h"
 #include "Assemblage.h"
+#include "tp3_prof/forfun.h"
 
-void affsmd_(int,int*,int*,int*,float*,float*,int*,float*);
 
 
 
@@ -69,7 +69,7 @@ int main() {
                 nbRefD0,numRefD0,nbRefD1,numRefD1,nbRefF1,numRefF1,NumDLDir,ValDLDir,SecMembre,Matrice,AdPrCoefLi,
                 NumCol,AdSuccLi );
 
-    affsmd_(NbLign,AdPrCoefLi,NumCol,AdSuccLi,Matrice,SecMembre,NumDLDir,ValDLDir);
+    affsmd_(&NbLign,AdPrCoefLi,NumCol,AdSuccLi,Matrice,SecMembre,NumDLDir,ValDLDir);
 
 
     freematFLOAT(MatElem);
@@ -78,9 +78,12 @@ int main() {
     freematINT(nRefAr);
     free(NumDLDir);
     free(ValDLDir);
+    free(SecMembre);
     free(Matrice);
-    free(AdPrCoefLi);
-    free(NumCol);
-    free(AdSuccLi);
+    // LES 3 VECTEURS CI-DESSOUS ONT DES PROBLEMES QUAND ON LES FREE
+    // CE SONT QUE DES FONCTIONS QU'ON PASSE A assmat_ 
+    free(AdSuccLi); // PROBLEME LORS DU FREE
+    free(NumCol); // PROBLEME LORS DU FREE 
+    free(AdPrCoefLi); // PROBLEME LORS DU FREE
     return 0;
 }
