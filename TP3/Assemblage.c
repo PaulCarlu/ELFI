@@ -15,8 +15,12 @@ void Assemblage(int typEl, int nbtng, int nbtel, int nbneel, int nbaret,int** nR
     int nbcoef = nbtng*2*((typEl==1)?8:6);
     float* DiagMat = calloc(nbtng,sizeof(float));
     float* LowMat = malloc(nbcoef*sizeof(float));
-    int NextAd = 0;
+    int NextAd = 1;
     int I, J, Itilde, Jtilde;
+
+    for(int i=0; i<nbtng; i++) {
+        NumDLDir[i] = i+1;
+    }
 
     for (int K=0; K < nbtel; K++) {
         // Assignation des valeurs pour la fonction cal1Elem
@@ -32,6 +36,8 @@ void Assemblage(int typEl, int nbtng, int nbtel, int nbneel, int nbaret,int** nR
         // Appel de cal1Elem
         cal1Elem(nbneel,nRefDom,nbRefD0,numRefD0,nbRefD1,numRefD1,nbRefF1,numRefF1,typEl,coorEl,nbaret,
                 nRefArEl,MatElem,SMbrElem,NuDElem,uDElem);
+        // Appel de impCalEl pour vérifier les calculs
+        impCalEl(K+1,typEl,nbneel,MatElem,SMbrElem,NuDElem,uDElem);
         
         // Boucle incrémentation ValDLDir et NumDLDir
         for(int i=0;i<nbneel;i++){
@@ -47,9 +53,15 @@ void Assemblage(int typEl, int nbtng, int nbtel, int nbneel, int nbaret,int** nR
 
                 assmat_(&Itilde,&Jtilde,&MatElem[i][j],AdPrCoefLi,NumCol,AdSuccLi,LowMat,&NextAd);
             }
-
-            NumDLDir[I-1] = NuDElem[i]*I;
-            ValDLDir[I-1] = uDElem[i];
+            
+            if (NuDElem[i] == 0) {
+                NumDLDir[I-1] = 0;
+                ValDLDir[I-1] = 0;
+            } else if (NuDElem[i] == -1 && NumDLDir[I-1] != 0) {
+                // Les noeuds de Dirichlet homogène passe en priorité
+                NumDLDir[I-1] = -I;
+                ValDLDir[I-1] = uDElem[i];
+            }
             DiagMat[I-1] += MatElem[i][i];
             SecMembre[I-1] += SMbrElem[i];
         }
@@ -64,8 +76,6 @@ void Assemblage(int typEl, int nbtng, int nbtel, int nbneel, int nbaret,int** nR
         Matrice[i+nbtng] = LowMat[i];
     }
 
-    // LES 2 VECTEURS CI-DESSOUS ONT DES PROBLEMES QUAND ON LES FREE
-    // 'free() : INVALID POINTER' SUR LES DEUX
-    // free(DiagMat);
-    // free(LowMat);
+    free(DiagMat);
+    free(LowMat);
 }
