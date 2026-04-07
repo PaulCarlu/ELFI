@@ -1,0 +1,1 @@
+gcc *.c ../TP3/Assemblage.c ../TP3/tp3_prof/*.o tp4_prof/*.o ../TP1/lecfima.c ../TP1/allocmat.c ../TP2/cal1Elem.c ../TP2/fonctionsDef.c ../TP2/fonctionsUtilitaires.c ../TP2/integralesElementaires.c ../TP2/processCalcElementaires.c -lm -lgfortran

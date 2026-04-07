@@ -62,7 +62,7 @@ int main() {
     int* AdPrCoefLi = calloc(NbLign,sizeof(int));
     int nbcoef = nbtng*2*((typEl==1)?8:6);
     float* Matrice = calloc((NbLign+nbcoef),sizeof(float));
-    int* NumCol = calloc(nbcoef*sizeof(int));
+    int* NumCol = calloc(nbcoef,sizeof(int));
     int* AdSuccLi = malloc(nbcoef*sizeof(int));
     
     Assemblage(typEl,nbtng,nbtel,nbneel,nbaret,nRefAr,ngnel,coord,MatElem,coorEl,SMbrElem,NuDElem,uDElem,nRefDom,

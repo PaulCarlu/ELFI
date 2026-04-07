@@ -37,7 +37,7 @@ void Assemblage(int typEl, int nbtng, int nbtel, int nbneel, int nbaret,int** nR
         cal1Elem(nbneel,nRefDom,nbRefD0,numRefD0,nbRefD1,numRefD1,nbRefF1,numRefF1,typEl,coorEl,nbaret,
                 nRefArEl,MatElem,SMbrElem,NuDElem,uDElem);
         // Appel de impCalEl pour vérifier les calculs
-        impCalEl(K+1,typEl,nbneel,MatElem,SMbrElem,NuDElem,uDElem);
+        //impCalEl(K+1,typEl,nbneel,MatElem,SMbrElem,NuDElem,uDElem);
         
         // Boucle incrémentation ValDLDir et NumDLDir
         for(int i=0;i<nbneel;i++){
