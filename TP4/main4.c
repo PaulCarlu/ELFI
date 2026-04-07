@@ -70,7 +70,10 @@ int main() {
                 nbRefD0,numRefD0,nbRefD1,numRefD1,nbRefF1,numRefF1,NumDLDir,ValDLDir,SecMembre,Matrice,AdPrCoefLi,
                 NumCol,AdSuccLi );
 
-    affsmd_(&NbLign,AdPrCoefLi,NumCol,AdSuccLi,Matrice,SecMembre,NumDLDir,ValDLDir);
+
+    nbcoef = AdPrCoefLi[NbLign-1];
+    int NumCol0 = malloc(nbcoef*sizeof(int));
+
 
 
     // Vecteurs intervenant dans SMO

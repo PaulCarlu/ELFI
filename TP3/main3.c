@@ -59,10 +59,10 @@ int main() {
     int* NumDLDir = malloc(NbLign*sizeof(int));
     float* ValDLDir = calloc(NbLign,sizeof(float));
     float* SecMembre = calloc(NbLign,sizeof(float));
-    int* AdPrCoefLi = calloc(NbLign,sizeof(int));
+    int* AdPrCoefLi = malloc(NbLign*sizeof(int));
     int nbcoef = nbtng*2*(typEl==1)?8:6;
     float* Matrice = calloc((NbLign+nbcoef),sizeof(float));
-    int* NumCol = malloc(nbcoef*sizeof(int));
+    int* NumCol = calloc(nbcoef*sizeof(int));
     int* AdSuccLi = malloc(nbcoef*sizeof(int));
     
     Assemblage(typEl,nbtng,nbtel,nbneel,nbaret,nRefAr,ngnel,coord,MatElem,coorEl,SMbrElem,NuDElem,uDElem,nRefDom,

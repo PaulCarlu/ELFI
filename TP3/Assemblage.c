@@ -45,7 +45,10 @@ void Assemblage(int typEl, int nbtng, int nbtel, int nbneel, int nbaret,int** nR
                 Itilde = (I<J)?J:I;
                 Jtilde = (I<J)?I:J;
 
-                assmat_(&Itilde,&Jtilde,&MatElem[i][j],AdPrCoefLi,NumCol,AdSuccLi,LowMat,&NextAd);
+                if (NextAd<nbcoef){
+                    assmat_(&Itilde,&Jtilde,&MatElem[i][j],AdPrCoefLi,NumCol,AdSuccLi,LowMat,&NextAd);
+                }
+                else printf("\nTaille de LowMat sous estimée\n");
             }
 
             NumDLDir[I-1] = NuDElem[i]*I;
