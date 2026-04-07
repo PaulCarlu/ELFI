@@ -22,7 +22,7 @@ int main() {
     - ngnel : matrice des numéros globaux des éléments
     - nRefAr : matrice des numéros de référence associés aux arrêtes
     */
-    char *ficmai = "../Maillages/car1x1t_1";
+    char *ficmai = "../Maillages/car3x3t_3";
     int typEl, nbtng, nbtel, nbneel, nbaret;
     float **coord; 
     int **ngnel, **nRefAr;
@@ -59,8 +59,8 @@ int main() {
     int* NumDLDir = malloc(NbLign*sizeof(int));
     float* ValDLDir = calloc(NbLign,sizeof(float));
     float* SecMembre = calloc(NbLign,sizeof(float));
-    int* AdPrCoefLi = malloc(NbLign*sizeof(int));
-    int nbcoef = nbtng*2*(typEl==1)?8:6;
+    int* AdPrCoefLi = calloc(NbLign,sizeof(int));
+    int nbcoef = nbtng*2*((typEl==1)?8:6);
     float* Matrice = calloc((NbLign+nbcoef),sizeof(float));
     int* NumCol = calloc(nbcoef*sizeof(int));
     int* AdSuccLi = malloc(nbcoef*sizeof(int));
@@ -80,10 +80,8 @@ int main() {
     free(ValDLDir);
     free(SecMembre);
     free(Matrice);
-    // LES 3 VECTEURS CI-DESSOUS ONT DES PROBLEMES QUAND ON LES FREE
-    // CE SONT QUE DES FONCTIONS QU'ON PASSE A assmat_ 
-    free(AdSuccLi); // PROBLEME LORS DU FREE
-    free(NumCol); // PROBLEME LORS DU FREE 
-    free(AdPrCoefLi); // PROBLEME LORS DU FREE
+    free(AdSuccLi);
+    free(NumCol);
+    free(AdPrCoefLi);
     return 0;
 }
