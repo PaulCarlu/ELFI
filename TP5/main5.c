@@ -6,7 +6,8 @@
 #include "../TP1/allocmat.h"
 #include "../TP3/Assemblage.h"
 #include "../TP3/tp3_prof/forfun.h"
-#include "dSMDaSMO.h"
+#include "../TP4/dSMDaSMO.h"
+#include "dSMOaPR.h"
 
 
 
@@ -80,6 +81,32 @@ int main() {
 
     affsmo_(&NbLign,AdPrCoefLi,NumColO,MatriceO,SecMembre);
 
+    int dimProf = 0;
+    for (int i=0; i<NbLign-1; i++) {
+        dimProf = dimProf + i+1 - NumColO[AdPrCoefLi[i]];
+    }
+    float* MatProf = calloc(NbLign+dimProf,sizeof(float));
+    int* Profil = malloc(NbLign*sizeof(int));
+
+    dSMOaPR(NbLign,AdPrCoefLi,NumColO,MatriceO,Profil,MatProf);
+
+    /* Décomposition LLT
+    Résolution :
+        L*Y = SecMembre
+        LT*U = Y
+    avec Y = LT*U
+    */
+    float* LowMatProf = MatProf + NbLign;
+    float eps = (float) 1.0e-07;
+    float* ld = malloc(NbLign*sizeof(float));
+    float* ll = malloc(dimProf*sizeof(float));
+    float* y = malloc(NbLign*sizeof(float));
+    float* u = malloc(NbLign*sizeof(float));
+
+    ltlpr_(&NbLign,Profil,MatProf,LowMatProf,&eps,ld,ll);
+    rsprl_(&NbLign,Profil,ld,ll,SecMembre,y);
+    rspru_(&NbLign,Profil,ld,ll,y,u);
+
     // Free des vecteurs et matrices
     freematFLOAT(MatElem);
     freematFLOAT(coord);
@@ -94,5 +121,12 @@ int main() {
     free(AdPrCoefLi);
     free(MatriceO);
     free(NumColO);
+    free(MatProf);
+    free(Profil);
+    free(LowMatProf);
+    free(ld);
+    free(ll);
+    free(y);
+    free(u);
     return 0;
 }

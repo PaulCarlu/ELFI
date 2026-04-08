@@ -71,6 +71,8 @@ void Assemblage(int typEl, int nbtng, int nbtel, int nbneel, int nbaret,int** nR
    
     }
 
+    AdPrCoefLi[nbtng-1] = NextAd;
+
     for(int i=0;i<nbtng;i++){
         Matrice[i] = DiagMat[i];
     }

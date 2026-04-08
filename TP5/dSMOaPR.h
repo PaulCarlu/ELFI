@@ -1,0 +1,1 @@
+void dSMOaPR(int NbLign, int* AdPrCoefLi, int* NumCol, float* Matrice, int* Profil, float* MatProf);
