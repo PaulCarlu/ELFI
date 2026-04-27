@@ -5,12 +5,14 @@
 #include "../TP1/lecfima.h"
 #include "../TP1/allocmat.h"
 #include "../TP3/Assemblage.h"
-#include "../TP3/tp3_prof/forfun.h"
+#include "tp5_prof/forfun.h"
 #include "../TP4/dSMDaSMO.h"
 #include "dSMOaPR.h"
+#include "CalSol.h"
 
 
-
+//extern int nucas;
+extern float* a,b,c,d;  
 
 int main() {
     // Utilisation de lecfima pour charger le fichier de maillage
@@ -71,7 +73,7 @@ int main() {
                 nbRefD0,numRefD0,nbRefD1,numRefD1,nbRefF1,numRefF1,NumDLDir,ValDLDir,SecMembre,MatriceD,AdPrCoefLi,
                 NumColD,AdSuccLi );
 
-    affsmd_(&NbLign,AdPrCoefLi,NumColD,AdSuccLi,MatriceD,SecMembre,NumDLDir,ValDLDir);
+    //affsmd_(&NbLign,AdPrCoefLi,NumColD,AdSuccLi,MatriceD,SecMembre,NumDLDir,ValDLDir);
     
     nbcoef = AdPrCoefLi[NbLign-1]-1;
     int* NumColO = malloc(nbcoef*sizeof(int));
@@ -83,15 +85,23 @@ int main() {
 
     int dimProf = 0;
     for (int i=0; i<NbLign-1; i++) {
-        dimProf = dimProf + i+1 - NumColO[AdPrCoefLi[i]];
+        if (AdPrCoefLi[i+1]-AdPrCoefLi[i]!=0){
+            dimProf = dimProf + i+2 - NumColO[AdPrCoefLi[i]-1];
+        }
     }
+    printf("\ndim Prof = %d \n",dimProf);
+
+
     float* MatProf = calloc(NbLign+dimProf,sizeof(float));
-    int* Profil = malloc(NbLign*sizeof(int));
+    int* Profil = malloc((NbLign+1)*sizeof(int));
 
     dSMOaPR(NbLign,AdPrCoefLi,NumColO,MatriceO,Profil,MatProf);
+    for (int i=0;i<NbLign+1;i++){
+        printf("\n%d \n",Profil[i]);
+    }
 
     /* Décomposition LLT
-    Résolution :
+    Résolution :extern int nucas = 1;  
         L*Y = SecMembre
         LT*U = Y
     avec Y = LT*U
@@ -101,11 +111,18 @@ int main() {
     float* ld = malloc(NbLign*sizeof(float));
     float* ll = malloc(dimProf*sizeof(float));
     float* y = malloc(NbLign*sizeof(float));
-    float* u = malloc(NbLign*sizeof(float));
+    float* U = malloc(NbLign*sizeof(float));
 
     ltlpr_(&NbLign,Profil,MatProf,LowMatProf,&eps,ld,ll);
     rsprl_(&NbLign,Profil,ld,ll,SecMembre,y);
-    rspru_(&NbLign,Profil,ld,ll,y,u);
+    rspru_(&NbLign,Profil,ld,ll,y,U);
+
+    // Calcul de la solution exacte
+    float* UEX = malloc(NbLign*sizeof(float));
+    CalSol(NbLign,coord,UEX);
+
+    int IMPFCH = 1;
+    affsol_(&NbLign,coord[0],U,UEX,&IMPFCH);
 
     // Free des vecteurs et matrices
     freematFLOAT(MatElem);
@@ -127,6 +144,7 @@ int main() {
     free(ld);
     free(ll);
     free(y);
-    free(u);
+    free(U);
+    free(UEX);
     return 0;
 }
