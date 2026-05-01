@@ -93,11 +93,11 @@ int main() {
 
 
     float* MatProf = calloc(NbLign+dimProf,sizeof(float));
-    int* Profil = malloc((NbLign+1)*sizeof(int));
+    int* Profil = malloc((NbLign)*sizeof(int));
 
     dSMOaPR(NbLign,AdPrCoefLi,NumColO,MatriceO,Profil,MatProf);
-    for (int i=0;i<NbLign+1;i++){
-        printf("\n%d \n",Profil[i]);
+    for (int i=0;i<dimProf;i++){
+        printf("\n%f \n",MatProf[NbLign+i]);
     }
 
     /* Décomposition LLT
@@ -114,8 +114,14 @@ int main() {
     float* U = malloc(NbLign*sizeof(float));
 
     ltlpr_(&NbLign,Profil,MatProf,LowMatProf,&eps,ld,ll);
+    printf("\nOK\n");
+    printf("OK\n");
+    printf("OK\n");
+    printf("OK\n");
+
     rsprl_(&NbLign,Profil,ld,ll,SecMembre,y);
     rspru_(&NbLign,Profil,ld,ll,y,U);
+
 
     // Calcul de la solution exacte
     float* UEX = malloc(NbLign*sizeof(float));
