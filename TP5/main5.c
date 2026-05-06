@@ -11,7 +11,8 @@
 #include "CalSol.h"
 
 
-//extern int nucas;
+int nucas = 1;
+int Domaine = 1;
 //extern float* a,b,c,d;  
 
 int main() {
@@ -26,7 +27,7 @@ int main() {
     - ngnel : matrice des numéros globaux des éléments
     - nRefAr : matrice des numéros de référence associés aux arrêtes
     */
-    char *ficmai = "../Maillages/car3x3t_3";
+    char *ficmai = "../Maillages/car1x1q_4";
     int typEl, nbtng, nbtel, nbneel, nbaret;
     float **coord; 
     int **ngnel, **nRefAr;
@@ -122,7 +123,7 @@ int main() {
     CalSol(NbLign,coord,UEX);
     
 
-    int IMPFCH = 10;
+    int IMPFCH = -10;
     affsol_(&NbLign,coord[0],U,UEX,&IMPFCH);
     
 

@@ -6,12 +6,11 @@
     Evaluation de la solution exacte
 --------------------------------------------------------------------------------
 */
-//extern int nucas;
+extern int nucas;
 
 
 float solex(float *coor) {
 
-    int nucas = 3;
 
   const float PI = M_PI;
   float val = 0.;
