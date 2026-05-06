@@ -158,18 +158,18 @@ int main() {
             switch (nucas)
             {
             case 1 :
-                nbRefD0 = 4, nbRefD1 = 0, nbRefF1 = 0; 
+                nbRefD0 = 2, nbRefD1 = 2, nbRefF1 = 0; 
                 numRefD0[0] = nRefAr[0][nbneel-1];
-                numRefD0[1] = nRefAr[0][nbneel-2];
-                numRefD0[2] = nRefAr[nbtel-1][nbneel-2]; 
-                numRefD0[3] = nRefAr[nbtel-1][nbneel-1];
+                numRefD0[1] = nRefAr[nbtel-1][nbneel-1];
+                numRefD1[0] = nRefAr[0][nbneel-2];
+                numRefD1[1] = nRefAr[nbtel-1][nbneel-2];
                 break;
             case 2 :
-                nbRefD0 = 4, nbRefD1 = 0, nbRefF1 = 0; 
+                nbRefD0 = 2, nbRefD1 = 2, nbRefF1 = 0; 
                 numRefD0[0] = nRefAr[0][nbneel-1];
-                numRefD0[1] = nRefAr[0][nbneel-2];
-                numRefD0[2] = nRefAr[nbtel-1][nbneel-2]; 
-                numRefD0[3] = nRefAr[nbtel-1][nbneel-1];
+                numRefD0[1] = nRefAr[nbtel-1][nbneel-1];
+                numRefD1[0] = nRefAr[0][nbneel-2];
+                numRefD1[1] = nRefAr[nbtel-1][nbneel-2];
                 break;
             case 3 :
                 nbRefD0 = 2, nbRefD1 = 0, nbRefF1 = 2; 
@@ -199,15 +199,17 @@ int main() {
         Assemblage(typEl,nbtng,nbtel,nbneel,nbaret,nRefAr,ngnel,coord,MatElem,coorEl,SMbrElem,NuDElem,uDElem,nRefDom,
                     nbRefD0,numRefD0,nbRefD1,numRefD1,nbRefF1,numRefF1,NumDLDir,ValDLDir,SecMembre,MatriceD,AdPrCoefLi,
                     NumColD,AdSuccLi );
-
-        //affsmd_(&NbLign,AdPrCoefLi,NumColD,AdSuccLi,MatriceD,SecMembre,NumDLDir,ValDLDir);
+        
+        // Affichage de la structure SMD
+        // affsmd_(&NbLign,AdPrCoefLi,NumColD,AdSuccLi,MatriceD,SecMembre,NumDLDir,ValDLDir);
         
         nbcoef = AdPrCoefLi[NbLign-1]-1;
         NumColO = malloc(nbcoef*sizeof(int));
         MatriceO = calloc(NbLign+nbcoef,sizeof(float));
 
         dSMDaSMO(NbLign,AdPrCoefLi,NumColD,AdSuccLi,MatriceD,SecMembre,NumDLDir,ValDLDir,MatriceO,NumColO);
-
+        
+        // Affichage de la structure SMO
         //affsmo_(&NbLign,AdPrCoefLi,NumColO,MatriceO,SecMembre);
 
         dimProf = 0;
@@ -241,12 +243,6 @@ int main() {
         // Calcul de la solution exacte
         UEX = malloc(NbLign*sizeof(float));
         CalSol(NbLign,coord,UEX);
-
-        /*
-        for(int i=0; i<NbLign; i++){
-            printf("U[%d] = %.15f ; UEX[%d] = %.15f\n",i,U[i],i,UEX[i]);
-        }
-        */
         
         affsol_(&NbLign,coord[0],U,UEX,&IMPFCH);
     }

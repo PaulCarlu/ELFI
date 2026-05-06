@@ -8,8 +8,8 @@
 #include "../TP3/tp3_prof/forfun.h"
 #include "dSMDaSMO.h"
 
-
-
+int Domaine = 1;
+int nucas = 1;
 
 int main() {
     // Utilisation de lecfima pour charger le fichier de maillage
@@ -23,7 +23,7 @@ int main() {
     - ngnel : matrice des numéros globaux des éléments
     - nRefAr : matrice des numéros de référence associés aux arrêtes
     */
-    char *ficmai = "../Maillages/car3x3t_3";
+    char *ficmai = "../maillage/d1t1/d1t1_2";
     int typEl, nbtng, nbtel, nbneel, nbaret;
     float **coord; 
     int **ngnel, **nRefAr;

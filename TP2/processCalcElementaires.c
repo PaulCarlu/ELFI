@@ -45,16 +45,16 @@ void intElem(int t,float** coorEl, float **matelm, float *vecelm){
         eltdif = fabs(det)*omegaquad[i];
 
         // Appel de W
-        cofvarW = FOMEGA(xquad[i]);
+        cofvarW = FOMEGA(FK_x);
         W(nbneel,Fbase_x,eltdif,cofvarW,vecelm);
 
         // Appel de WW
-        cofvarW = A00(xquad[i]);
+        cofvarW = A00(FK_x);
         WW(nbneel,Fbase_x,eltdif,cofvarW,matelm);
 
         // Appel de ADWDW
-        cofvarADWDW[0][0] = A11(xquad[i]); cofvarADWDW[0][1] = A12(xquad[i]);
-        cofvarADWDW[1][0] = A12(xquad[i]); cofvarADWDW[1][1] = A22(xquad[i]);
+        cofvarADWDW[0][0] = A11(FK_x); cofvarADWDW[0][1] = A12(FK_x);
+        cofvarADWDW[1][0] = A12(FK_x); cofvarADWDW[1][1] = A22(FK_x);
         for(int i=0;i<nbneel;i++){
             DerParFbase[i][0] = DerFbase_x[i][0]*InvJacFK_x[0][0] + DerFbase_x[i][1]*InvJacFK_x[1][0];
             DerParFbase[i][1] = DerFbase_x[i][0]*InvJacFK_x[0][1] + DerFbase_x[i][1]*InvJacFK_x[1][1];
@@ -102,11 +102,11 @@ void intAret(float** coorAr, float **mataret, float *vecaret){
         eltdif = normeJaFk_x*omegaquad[i];
 
         // Appel de W
-        cofvar = FN(xquad[i]);
+        cofvar = FN(FK_x);
         W(nbneel,Fbase_x,eltdif,cofvar,vecaret);
 
         // Appel de WW
-        cofvar = BN(xquad[i]);
+        cofvar = BN(FK_x);
         WW(nbneel,Fbase_x,eltdif,cofvar,mataret);
 
         
