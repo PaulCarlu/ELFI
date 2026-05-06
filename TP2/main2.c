@@ -48,6 +48,8 @@ int main() {
     float SMbrElem[nbneel], uDElem[nbneel];
     int NuDElem[nbneel], *nRefArEl;
 
+
+
     // Conditons aux bords
     int nRefDom = nRefAr[0][0];
     int nbRefD0 = 1; int numRefD0[] = {nRefAr[0][nbneel-1]};
