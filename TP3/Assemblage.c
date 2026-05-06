@@ -30,6 +30,7 @@ void Assemblage(int typEl, int nbtng, int nbtel, int nbneel, int nbaret,int** nR
             }
             SMbrElem[i] = 0;
         }
+
         selectPts(nbneel,ngnel[K],coord,coorEl);
         nRefArEl = nRefAr[K];
 
