@@ -120,18 +120,11 @@ int main() {
     // Calcul de la solution exacte
     float* UEX = malloc(NbLign*sizeof(float));
     CalSol(NbLign,coord,UEX);
-
-    for(int i=0; i<NbLign; i++){
-        printf("U[%d] = %.15f ; UEX[%d] = %.15f\n",i,U[i],i,UEX[i]);
-    }
     
 
-    int IMPFCH = -10;
+    int IMPFCH = 10;
     affsol_(&NbLign,coord[0],U,UEX,&IMPFCH);
-    printf("\nOK\n");
-    printf("OK\n");
-    printf("OK\n");
-    printf("OK\n");
+    
 
     // Free des vecteurs et matrices
     freematFLOAT(MatElem);
@@ -149,7 +142,6 @@ int main() {
     free(NumColO);
     free(MatProf);
     free(Profil);
-    free(LowMatProf);
     free(ld);
     free(ll);
     free(y);
