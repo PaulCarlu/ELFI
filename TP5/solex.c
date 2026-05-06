@@ -11,7 +11,7 @@
 
 float solex(float *coor) {
 
-    int nucas = 1;
+    int nucas = 3;
 
   const float PI = M_PI;
   float val = 0.;

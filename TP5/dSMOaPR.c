@@ -27,5 +27,6 @@ void dSMOaPR(int NbLign, int* AdPrCoefLi, int* NumCol, float* Matrice, int* Prof
             NextAd = NextAd + i+2 - NumCol[indx + NbNNLi-1];
         }
     }
-    Profil[NbLign] = NextAd;
+    Profil[NbLign-1] = NextAd+1;
+
 }

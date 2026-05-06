@@ -12,7 +12,7 @@
 
 
 //extern int nucas;
-extern float* a,b,c,d;  
+//extern float* a,b,c,d;  
 
 int main() {
     // Utilisation de lecfima pour charger le fichier de maillage
@@ -81,7 +81,7 @@ int main() {
 
     dSMDaSMO(NbLign,AdPrCoefLi,NumColD,AdSuccLi,MatriceD,SecMembre,NumDLDir,ValDLDir,MatriceO,NumColO);
 
-    affsmo_(&NbLign,AdPrCoefLi,NumColO,MatriceO,SecMembre);
+    //affsmo_(&NbLign,AdPrCoefLi,NumColO,MatriceO,SecMembre);
 
     int dimProf = 0;
     for (int i=0; i<NbLign-1; i++) {
@@ -89,16 +89,14 @@ int main() {
             dimProf = dimProf + i+2 - NumColO[AdPrCoefLi[i]-1];
         }
     }
-    printf("\ndim Prof = %d \n",dimProf);
 
 
     float* MatProf = calloc(NbLign+dimProf,sizeof(float));
     int* Profil = malloc((NbLign)*sizeof(int));
 
     dSMOaPR(NbLign,AdPrCoefLi,NumColO,MatriceO,Profil,MatProf);
-    for (int i=0;i<dimProf;i++){
-        printf("\n%f \n",MatProf[NbLign+i]);
-    }
+    
+   
 
     /* Décomposition LLT
     Résolution :extern int nucas = 1;  
@@ -114,21 +112,26 @@ int main() {
     float* U = malloc(NbLign*sizeof(float));
 
     ltlpr_(&NbLign,Profil,MatProf,LowMatProf,&eps,ld,ll);
-    printf("\nOK\n");
-    printf("OK\n");
-    printf("OK\n");
-    printf("OK\n");
+    
 
     rsprl_(&NbLign,Profil,ld,ll,SecMembre,y);
     rspru_(&NbLign,Profil,ld,ll,y,U);
-
-
+   
     // Calcul de la solution exacte
     float* UEX = malloc(NbLign*sizeof(float));
     CalSol(NbLign,coord,UEX);
 
-    int IMPFCH = 1;
+    for(int i=0; i<NbLign; i++){
+        printf("U[%d] = %.15f ; UEX[%d] = %.15f\n",i,U[i],i,UEX[i]);
+    }
+    
+
+    int IMPFCH = -10;
     affsol_(&NbLign,coord[0],U,UEX,&IMPFCH);
+    printf("\nOK\n");
+    printf("OK\n");
+    printf("OK\n");
+    printf("OK\n");
 
     // Free des vecteurs et matrices
     freematFLOAT(MatElem);
