@@ -242,19 +242,6 @@ int main() {
         UEX = malloc(NbLign*sizeof(float));
         CalSol(NbLign,coord,UEX);
 
-<<<<<<< HEAD
-    rsprl_(&NbLign,Profil,ld,ll,SecMembre,y);
-    rspru_(&NbLign,Profil,ld,ll,y,U);
-   
-    // Calcul de la solution exacte
-    float* UEX = malloc(NbLign*sizeof(float));
-    CalSol(NbLign,coord,UEX);
-    
-
-    int IMPFCH = 10;
-    affsol_(&NbLign,coord[0],U,UEX,&IMPFCH);
-    
-=======
         /*
         for(int i=0; i<NbLign; i++){
             printf("U[%d] = %.15f ; UEX[%d] = %.15f\n",i,U[i],i,UEX[i]);
@@ -263,7 +250,6 @@ int main() {
         
         affsol_(&NbLign,coord[0],U,UEX,&IMPFCH);
     }
->>>>>>> 7eda4e7 (.)
 
     // Free des vecteurs et matrices
     freematFLOAT(MatElem);
