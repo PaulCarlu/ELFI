@@ -11,7 +11,7 @@ Donner le nom du fichier de maillage : ../../triangu/car3x3t_3
 
 Sauvegarde de la S.M.D. dans le fichier SMD
  ****** Affichage de la S.M.D. ******
- Donner, dans l'intervalle [1,          16 ], les indices min et max des lignes a afficher. Taper q pour arreter.
+ Donner, dans l intervalle [1,          16 ], les indices min et max des lignes a afficher. Taper q pour arreter.
 1 16
 
  Ligne     SecMbr    Nuddir     Valdir
@@ -97,7 +97,7 @@ Col  15 :    2.91667
 Col  15 :  -0.291667    
 Col  12 :  -0.291667    
 Col  16 :    1.75000    
- Donner, dans l'intervalle [1,          16 ], les indices min et max des lignes a afficher. Taper q pour arreter.
+ Donner, dans l intervalle [1,          16 ], les indices min et max des lignes a afficher. Taper q pour arreter.
 q
 Sauvegarde de la S.M.O. dans le fichier SMO
   NOMBRE DE LIGNES :          16

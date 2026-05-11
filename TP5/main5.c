@@ -118,6 +118,8 @@ int main() {
         }
         printf("%s\n",ficmai);
         
+        // "../maillage/car3x3t_3"
+
         lecfima(ficmai,&typEl,&nbtng,&coord,&nbtel,&ngnel,&nbneel,&nbaret,&nRefAr);
 
         // Conditons aux bords
@@ -137,11 +139,15 @@ int main() {
             switch (nucas)
             {
             case 1 :
-                nbRefD0 = 4, nbRefD1 = 0, nbRefF1 = 0; 
+                nbRefD0 = 1, nbRefD1 = 1, nbRefF1 = 2; 
+                //numRefD0[0] = bord1;
+                //numRefD0[1] = bord2;
+                //numRefD0[2] = bord3;
+                //numRefD0[3] = bord4;
                 numRefD0[0] = bord1;
-                numRefD0[1] = bord2;
-                numRefD0[2] = bord3;
-                numRefD0[3] = bord4;
+                numRefD1[0] = bord4;
+                numRefF1[0] = bord2;
+                numRefF1[1] = bord3;
                 break;
             case 2 :
                 nbRefD0 = 4, nbRefD1 = 0, nbRefF1 = 0; 
@@ -178,9 +184,9 @@ int main() {
                 numRefD1[1] = bord3;
                 break;
             case 3 :
-                nbRefD0 = 2, nbRefD1 = 0, nbRefF1 = 2; 
-                numRefD0[0] = bord1;
-                numRefD0[1] = bord4;
+                nbRefD0 = 0, nbRefD1 = 2, nbRefF1 = 2; 
+                numRefD1[0] = bord1;
+                numRefD1[1] = bord4;
                 numRefF1[0] = bord2;
                 numRefF1[1] = bord3;
                 break;
@@ -207,7 +213,7 @@ int main() {
                     NumColD,AdSuccLi );
         
         // Affichage de la structure SMD
-        // affsmd_(&NbLign,AdPrCoefLi,NumColD,AdSuccLi,MatriceD,SecMembre,NumDLDir,ValDLDir);
+        affsmd_(&NbLign,AdPrCoefLi,NumColD,AdSuccLi,MatriceD,SecMembre,NumDLDir,ValDLDir);
         
         nbcoef = AdPrCoefLi[NbLign-1]-1;
         NumColO = malloc(nbcoef*sizeof(int));
@@ -216,7 +222,7 @@ int main() {
         dSMDaSMO(NbLign,AdPrCoefLi,NumColD,AdSuccLi,MatriceD,SecMembre,NumDLDir,ValDLDir,MatriceO,NumColO);
         
         // Affichage de la structure SMO
-        //affsmo_(&NbLign,AdPrCoefLi,NumColO,MatriceO,SecMembre);
+        affsmo_(&NbLign,AdPrCoefLi,NumColO,MatriceO,SecMembre);
 
         dimProf = 0;
         for (int i=0; i<NbLign-1; i++) {

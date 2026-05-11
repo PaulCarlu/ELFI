@@ -63,7 +63,7 @@ const float PI = M_PI;
                 if((fabs(x[0]-1/3)<1e-7) && (0<x[1])){
                     val=-PI*sin(PI/3)*cos(PI*x[1]);
                 }
-                if((fabs(x[1]-1/3)<1e-7) && (0<x[0])){
+                else if((fabs(x[1]-1/3)<1e-7) && (0<x[0])){
                     val=-PI*sin(PI/3)*cos(PI*x[0]);
                 }
                 break;

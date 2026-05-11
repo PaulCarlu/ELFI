@@ -99,7 +99,8 @@ void intAret(float** coorAr, float **mataret, float *vecaret){
         matJacob(1, nbneel, coorAr, DerFbase_x, JacFK_x);// matJacob prend en charge la dimension 1
         normeJaFk_x = sqrt(fabs( pow(JacFK_x[0][0],2) + pow(JacFK_x[1][0],2) )); // Norme euclidienne de la Jacobienne
 
-        eltdif = normeJaFk_x*omegaquad[i];
+        //eltdif = normeJaFk_x*omegaquad[i];
+        eltdif = fabs(coorAr[0] - coorAr[1])*omegaquad[i];
 
         // Appel de W
         cofvar = FN(FK_x);
