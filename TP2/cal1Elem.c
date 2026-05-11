@@ -35,7 +35,7 @@ void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int* numRefD0, int nbRefD1, 
     uDElem[i] = 0;
   }
 
-  int numPnts_Naret[2];
+  int numPnts_Naret[2]; int refArete;
   float **mataret = allocmatFLOAT(2,2);
   float vecaret[2];
   float **coorAr = allocmatFLOAT(2,2);
@@ -43,6 +43,7 @@ void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int* numRefD0, int nbRefD1, 
   /* Boucle sur les arêtes de l'élément courant */
   for(int i=0;i<nbaret;i++){
     numNaret(typEl,i+1,numPnts_Naret);
+    refArete = nRefArEl[i];
     // Attribution des conditions de Dirichlet homogène suivant les arêtes
     for(int j=0;j<nbRefD0;j++){
       if(nRefArEl[i]==numRefD0[j]){
@@ -69,7 +70,7 @@ void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int* numRefD0, int nbRefD1, 
           vecaret[n] = 0;
         }
         selectPts(2,numPnts_Naret,coorEl,coorAr);
-        intAret(coorAr,mataret,vecaret);
+        intAret(refArete,coorAr,mataret,vecaret);
 
         for(int k=0;k<2;k++){
           for(int l=0;l<2;l++){

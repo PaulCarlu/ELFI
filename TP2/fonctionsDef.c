@@ -45,13 +45,9 @@ const float PI = M_PI;
     }
     
 
-    float FN(float* x){
-        float val;
-        if (Domaine == 1){
-            val = 0;
-        }
-
-        else if (Domaine == 2){
+    float FN(float* x,int refArete){
+        float val = 0.0;
+        if (Domaine == 2){
             switch (nucas) {
                 case 1 :
                 val=0;
@@ -60,11 +56,16 @@ const float PI = M_PI;
                 val=0;
                 break;
                 case 3 :
-                if((fabs(x[0]-1/3)<1e-7) && (0<x[1])){
-                    val=-PI*sin(PI/3)*cos(PI*x[1]);
-                }
-                else if((fabs(x[1]-1/3)<1e-7) && (0<x[0])){
-                    val=-PI*sin(PI/3)*cos(PI*x[0]);
+                switch(refArete)
+                {
+                    case 2:
+                        return -PI*sin(PI/3.0)*cos(PI*x[1]);
+
+                    case 3:
+                        return -PI*sin(PI/3.0)*cos(PI*x[0]);
+
+                    default:
+                        return 0.0;
                 }
                 break;
             default :

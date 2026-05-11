@@ -6,7 +6,7 @@ float A12(float*);
 float A22(float*);
 float A00(float*);
 float BN(float*);
-float FN(float*);
+float FN(float*,int);
 float FOMEGA(float*);
 float UD(float*);
 

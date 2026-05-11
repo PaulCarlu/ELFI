@@ -69,7 +69,7 @@ void intElem(int t,float** coorEl, float **matelm, float *vecelm){
     freematFLOAT(DerParFbase);
 }
 
-void intAret(float** coorAr, float **mataret, float *vecaret){
+void intAret(int refArete, float** coorAr, float **mataret, float *vecaret){
 
     // Nombre de noeuds géométrique
     int nbneel = 2;
@@ -99,11 +99,10 @@ void intAret(float** coorAr, float **mataret, float *vecaret){
         matJacob(1, nbneel, coorAr, DerFbase_x, JacFK_x);// matJacob prend en charge la dimension 1
         normeJaFk_x = sqrt(fabs( pow(JacFK_x[0][0],2) + pow(JacFK_x[1][0],2) )); // Norme euclidienne de la Jacobienne
 
-        //eltdif = normeJaFk_x*omegaquad[i];
-        eltdif = fabs(coorAr[0] - coorAr[1])*omegaquad[i];
+        eltdif = normeJaFk_x*omegaquad[i];
 
         // Appel de W
-        cofvar = FN(FK_x);
+        cofvar = FN(FK_x,refArete);
         W(nbneel,Fbase_x,eltdif,cofvar,vecaret);
 
         // Appel de WW
