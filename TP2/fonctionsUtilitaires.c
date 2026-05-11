@@ -15,8 +15,8 @@ void ppquad(int t, float *romega, float **rx){
 	- rx : matrice de coordonnées des points de quadrature
 	*/
 	if (t==1){
-		for(int k=0;k<3;k++) romega[k] = 1.0/36;
-		for(int k=4;k<7;k++)romega[k] = 1.0/9;
+		for(int k=0;k<4;k++) romega[k] = 1.0/36;
+		for(int k=4;k<8;k++)romega[k] = 1.0/9;
 		romega[8]= 4.0/9;
 
 		rx[0][0] = 1, rx[0][1] = 0;
@@ -97,7 +97,7 @@ void calDerFbase(int t, float* x, float** d_Fbase){
 	*/
 	if (t==1){
 		d_Fbase[0][0] = 1 - x[1];
-		d_Fbase[0][1] = x[0];
+		d_Fbase[0][1] = - x[0];
 		d_Fbase[1][0] = x[1];
 		d_Fbase[1][1] = x[0];
 		d_Fbase[2][0] = -x[1];

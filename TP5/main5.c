@@ -79,6 +79,7 @@ int main() {
     float SMbrElem[nbneel], uDElem[nbneel];
     int NuDElem[nbneel];
 
+    int bord1, bord2, bord3, bord4;
     int nRefDom;
     int nbRefD0, nbRefF1, nbRefD1;
     int numRefD0[4], numRefD1[4], numRefF1[4];
@@ -120,36 +121,41 @@ int main() {
         lecfima(ficmai,&typEl,&nbtng,&coord,&nbtel,&ngnel,&nbneel,&nbaret,&nRefAr);
 
         // Conditons aux bords
-        /* Pour aller chercher les bords :
-        - bord 1 = nRefAr[0][nbneel-1]
-        - bord 2 = nRefAr[0][nbneel-2]
-        - bord 3 = nRefAr[nbtel-1][nbneel-2]
-        - bord 4 = nRefAr[nbtel-1][nbneel-1]
-        */
-       nRefDom = nRefAr[0][0];
+        if(nbneel == 4) {
+            bord1 = nRefAr[0][3];
+            bord2 = nRefAr[nbtel-1][0];
+            bord3 = nRefAr[nbtel-1][1];
+            bord4 = nRefAr[0][2];
+        } else if (nbneel == 3) {
+            bord1 = nRefAr[0][2];
+            bord2 = nRefAr[nbtel-1][1];
+            bord3 = nRefAr[nbtel-1][2];
+            bord4 = nRefAr[0][1];
+        }
+        nRefDom = nRefAr[0][0];
         if (Domaine == 1) {
             switch (nucas)
             {
             case 1 :
                 nbRefD0 = 4, nbRefD1 = 0, nbRefF1 = 0; 
-                numRefD0[0] = nRefAr[0][nbneel-1];
-                numRefD0[1] = nRefAr[0][nbneel-2];
-                numRefD0[2] = nRefAr[nbtel-1][nbneel-2]; 
-                numRefD0[3] = nRefAr[nbtel-1][nbneel-1];
+                numRefD0[0] = bord1;
+                numRefD0[1] = bord2;
+                numRefD0[2] = bord3;
+                numRefD0[3] = bord4;
                 break;
             case 2 :
                 nbRefD0 = 4, nbRefD1 = 0, nbRefF1 = 0; 
-                numRefD0[0] = nRefAr[0][nbneel-1];
-                numRefD0[1] = nRefAr[0][nbneel-2];
-                numRefD0[2] = nRefAr[nbtel-1][nbneel-2]; 
-                numRefD0[3] = nRefAr[nbtel-1][nbneel-1];
+                numRefD0[0] = bord1;
+                numRefD0[1] = bord2;
+                numRefD0[2] = bord3; 
+                numRefD0[3] = bord4;
                 break;
             case 3 :
                 nbRefD0 = 0, nbRefD1 = 0, nbRefF1 = 4; 
-                numRefF1[0] = nRefAr[0][nbneel-1];
-                numRefF1[1] = nRefAr[0][nbneel-2];
-                numRefF1[2] = nRefAr[nbtel-1][nbneel-2]; 
-                numRefF1[3] = nRefAr[nbtel-1][nbneel-1];
+                numRefF1[0] = bord1;
+                numRefF1[1] = bord2;
+                numRefF1[2] = bord3; 
+                numRefF1[3] = bord4;
                 break;
             default:
                 break;
@@ -159,24 +165,24 @@ int main() {
             {
             case 1 :
                 nbRefD0 = 2, nbRefD1 = 2, nbRefF1 = 0; 
-                numRefD0[0] = nRefAr[0][nbneel-1];
-                numRefD0[1] = nRefAr[nbtel-1][nbneel-1];
-                numRefD1[0] = nRefAr[0][nbneel-2];
-                numRefD1[1] = nRefAr[nbtel-1][nbneel-2];
+                numRefD0[0] = bord1;
+                numRefD0[1] = bord4;
+                numRefD1[0] = bord2;
+                numRefD1[1] = bord3;
                 break;
             case 2 :
                 nbRefD0 = 2, nbRefD1 = 2, nbRefF1 = 0; 
-                numRefD0[0] = nRefAr[0][nbneel-1];
-                numRefD0[1] = nRefAr[nbtel-1][nbneel-1];
-                numRefD1[0] = nRefAr[0][nbneel-2];
-                numRefD1[1] = nRefAr[nbtel-1][nbneel-2];
+                numRefD0[0] = bord1;
+                numRefD0[1] = bord4;
+                numRefD1[0] = bord2;
+                numRefD1[1] = bord3;
                 break;
             case 3 :
                 nbRefD0 = 2, nbRefD1 = 0, nbRefF1 = 2; 
-                numRefD0[0] = nRefAr[0][nbneel-1];
-                numRefD0[1] = nRefAr[nbtel-1][nbneel-1];
-                numRefF1[0] = nRefAr[0][nbneel-2];
-                numRefF1[1] = nRefAr[nbtel-1][nbneel-2];
+                numRefD0[0] = bord1;
+                numRefD0[1] = bord4;
+                numRefF1[0] = bord2;
+                numRefF1[1] = bord3;
                 break;
             default:
                 break;

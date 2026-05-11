@@ -9,9 +9,6 @@ extern int Domaine;
 extern int nucas;
 const float PI = M_PI;
 
-extern int Domaine;
-extern int nucas;
-
     float A11(float* x){
         return 1;
     }
