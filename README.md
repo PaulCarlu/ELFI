@@ -1,22 +1,62 @@
-CARLU Paul - MARTIN Malo
-Université de Rennes
-Master 1 Mathématiques et Applications parcours Calcul scientifique et modélisation
+**CARLU Paul** - **MARTIN Malo**  
+Université de Rennes  
+Master 1 Mathématiques et Applications — parcours *Calcul scientifique et modélisation*
 
-Ce travail a été réalisé dans le cadre du module 'Elements finis' du master.
+---
 
-La compilation se fait dans le dossier 'TP5' à l'aide du fichier 'script.sh'.
-Pour ce faire, il faut au préalable avoir compilé les fichiers fortran à l'intérieure du dossier 'tp5_prof' pour obtenir les '.o' nécessaire.
+## Contexte
 
-Lors de l'éxécution du programme, il vous sera demander des choix à faire :
-    - domaine : 1 ou 2
-    - cas : 1, 2 ou 3
-    - maillage (quadrangle/triangle) : 1 ou 2
-    - IMPFCH : entier pour imprimer dans fort.IMPFCH les erreurs
-      (attention : pour 5 et 6 renvoie une erreur qui provient de affsol_)
+Ce travail a été réalisé dans le cadre du module **Éléments finis** du master.
 
-Après avoir fait ces choix, la procédure se lance pour l'ensemble des fichiers possible.
-    Exemple : 
-    choix --> 1 | 2 | 2 | 8
-    lance la procédure pour les fichiers --> d1t1_2 | d1t1_4 | d1t1_8 | d1t1_16 | d1t1_32 | d1t1_64
-    sur le cas --> 2
-    les erreurs seront imprimées dans le fichier --> fort.8
+---
+
+## Compilation
+
+La compilation se fait dans le dossier `TP5` à l'aide du fichier :
+
+```bash
+script.sh
+```
+
+Avant cela, il est nécessaire de compiler les fichiers Fortran présents dans le dossier `tp5_prof` afin d'obtenir les fichiers `.o` nécessaires.
+
+---
+
+## Exécution du programme
+
+Lors de l'exécution du programme, plusieurs choix sont demandés :
+
+- **domaine** : `1` ou `2`
+- **cas** : `1`, `2` ou `3`
+- **maillage** (quadrangle / triangle) : `1` ou `2`
+- **IMPFCH** : entier permettant d'imprimer les erreurs dans `fort.IMPFCH`
+
+> Attention : les valeurs `5` et `6` renvoient une erreur provenant de `affsol_`.
+
+---
+
+## Exemple d'exécution
+
+Entrée :
+
+```text
+1 | 2 | 2 | 8
+```
+
+La procédure sera lancée pour les fichiers :
+
+```text
+d1t1_2
+d1t1_4
+d1t1_8
+d1t1_16
+d1t1_32
+d1t1_64
+```
+
+- Cas utilisé : `2`
+- Les erreurs seront imprimées dans le fichier :
+
+```text
+fort.8
+```
