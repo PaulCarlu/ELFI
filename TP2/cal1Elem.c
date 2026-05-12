@@ -1,4 +1,9 @@
-// Paul Carlu - Malo Martin
+/* 
+Paul Carlu - Malo Martin 
+Université de Rennes 
+Master 1 CSM
+Module - Elements finis
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,13 +34,13 @@ void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int* numRefD0, int nbRefD1, 
     SMbrElem[i] = vecelm[i];
   }
 
-  /* NuDElem et uDElem */
+  /* Initialisation de NuDElem et uDElem */
   for(int i=0; i<nbneel; i++) {
     NuDElem[i] = 1;
     uDElem[i] = 0;
   }
 
-  int numPnts_Naret[2]; int refArete;
+  int numPnts_Naret[2]; int refArete, ptAr1, ptAr2;
   float **mataret = allocmatFLOAT(2,2);
   float vecaret[2];
   float **coorAr = allocmatFLOAT(2,2);
@@ -43,7 +48,7 @@ void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int* numRefD0, int nbRefD1, 
   /* Boucle sur les arêtes de l'élément courant */
   for(int i=0;i<nbaret;i++){
     numNaret(typEl,i+1,numPnts_Naret);
-    refArete = nRefArEl[i];
+    refArete = nRefArEl[i]; // Variable utile pour savoir si on se situe sur un bord
     // Attribution des conditions de Dirichlet homogène suivant les arêtes
     for(int j=0;j<nbRefD0;j++){
       if(nRefArEl[i]==numRefD0[j]){
@@ -64,6 +69,7 @@ void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int* numRefD0, int nbRefD1, 
     for(int j=0; j<nbRefF1; j++) {
 
       if(nRefArEl[i] == numRefF1[j]){
+        // Remise à zéro de mataret et vecaret
         for(int n=0; n<2;n++) {
           mataret[n][0] = 0;
           mataret[n][1] = 0;
@@ -72,11 +78,14 @@ void cal1Elem(int nbneel, int nRefDom, int nbRefD0, int* numRefD0, int nbRefD1, 
         selectPts(2,numPnts_Naret,coorEl,coorAr);
         intAret(refArete,coorAr,mataret,vecaret);
 
+        // Remplissage de MatElem et SMbrElem
         for(int k=0;k<2;k++){
+          ptAr1 = numPnts_Naret[k]-1;
           for(int l=0;l<2;l++){
-            MatElem[numPnts_Naret[k]-1][numPnts_Naret[l]-1] =  MatElem[numPnts_Naret[k]-1][numPnts_Naret[l]-1] + mataret[k][l];
+            ptAr2 = numPnts_Naret[l]-1;
+            MatElem[ptAr1][ptAr2] =  MatElem[ptAr1][ptAr2] + mataret[k][l];
           }
-          SMbrElem[numPnts_Naret[k]-1] += vecaret[k];
+          SMbrElem[ptAr1] += vecaret[k];
         }
       }
       

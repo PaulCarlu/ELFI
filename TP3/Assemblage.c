@@ -1,4 +1,9 @@
-// Paul Carlu - Malo Martin
+/* 
+Paul Carlu - Malo Martin 
+Université de Rennes 
+Master 1 CSM
+Module - Elements finis
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,13 +22,16 @@ void Assemblage(int typEl, int nbtng, int nbtel, int nbneel, int nbaret,int** nR
     float* LowMat = malloc(nbcoef*sizeof(float));
     int NextAd = 1;
     int I, J, Itilde, Jtilde;
-
+    
+    // Initialisation de NumDLDir
+    // Au départ, l'ensemble des noeuds sont considérés comme étant Dirichlet non homogène
     for(int i=0; i<nbtng; i++) {
         NumDLDir[i] = i+1;
     }
 
     for (int K=0; K < nbtel; K++) {
-        // Assignation des valeurs pour la fonction cal1Elem
+        /* Assignation des valeurs pour la fonction cal1Elem */
+        // Remise à zéro
         for (int i=0; i<nbneel; i++) {
             for (int j=0; j<nbneel; j++) {
                 MatElem[i][j] = 0;
@@ -52,12 +60,18 @@ void Assemblage(int typEl, int nbtng, int nbtel, int nbneel, int nbaret,int** nR
                 Itilde = (I<J)?J:I;
                 Jtilde = (I<J)?I:J;
 
+                // Test si on a considéré un tableau assez grand + appel de assmat
                 if (NextAd<nbcoef){
                     assmat_(&Itilde,&Jtilde,&MatElem[i][j],AdPrCoefLi,NumCol,AdSuccLi,LowMat,&NextAd);
                 }
                 else printf("\nTaille de LowMat sous estimée\n");
             }
             
+            /* 
+            Test pour savoir si on est sur un noeud de Dirichlet ou Neumann 
+            Les noeuds de Dirichlet homogène passe en priorité par rapport à ceux de Neumann
+            L'initialisation considère tous les noeuds comme Dirichlet non homogène donc pas besoin de le changer ici
+            */
             if (NuDElem[i] == 0) {
                 NumDLDir[I-1] = 0;
                 ValDLDir[I-1] = 0;
@@ -66,6 +80,7 @@ void Assemblage(int typEl, int nbtng, int nbtel, int nbneel, int nbaret,int** nR
                 NumDLDir[I-1] = -I;
                 ValDLDir[I-1] = uDElem[i];
             }
+            // Assemblage de la diagonale et du second membre
             DiagMat[I-1] += MatElem[i][i];
             SecMembre[I-1] += SMbrElem[i];
         }
@@ -74,10 +89,10 @@ void Assemblage(int typEl, int nbtng, int nbtel, int nbneel, int nbaret,int** nR
 
     AdPrCoefLi[nbtng-1] = NextAd;
 
+    // Assemblage de la matrice
     for(int i=0;i<nbtng;i++){
         Matrice[i] = DiagMat[i];
     }
-
     for(int i=0;i<nbcoef;i++){
         Matrice[i+nbtng] = LowMat[i];
     }

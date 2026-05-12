@@ -1,7 +1,14 @@
-// Carlu Paul - Martin Malo
+/* 
+Paul Carlu - Malo Martin 
+Université de Rennes 
+Master 1 CSM
+Module - Elements finis
+*/
+
 //
 // gcc allocmat.c maillage.c lecfima.c main1.c -o executable
 //
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "maillage.h"

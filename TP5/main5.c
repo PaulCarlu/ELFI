@@ -1,5 +1,10 @@
-// Carlu Paul - Martin Malo
-//
+/* 
+Paul Carlu - Malo Martin 
+Université de Rennes 
+Master 1 CSM
+Module - Elements finis
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -13,10 +18,23 @@
 
 int Domaine = 0;
 int nucas = 0;
-//extern float* a,b,c,d;  
 
 int main() {
-    // Demande des choix de l'utilisateur
+    /* 
+    Demande des choix de l'utilisateur :
+    - domaine : 1 ou 2
+    - cas : 1, 2 ou 3
+    - maillage (quadrangle/triangle) : 1 ou 2
+    - IMPFCH : entier pour fort.IMPFCH, le fichier des erreurs
+      (attention : pour 5 et 6 ça renvoie une erreur qui provient de affsol_)
+
+    Après avoir fait ces choix, la procédure se lance pour l'ensemble des fichiers possible.
+    Exemple : 
+    choix --> 1 | 2 | 2 | 8
+    lance la procédure pour les fichiers --> d1t1_2 | d1t1_4 | d1t1_8 | d1t1_16 | d1t1_32 | d1t1_64
+    sur le cas --> 2
+    les erreurs seront imprimées dans le fichier --> fort.8
+    */
     printf("Choisir le domaine d'étude (1 ou 2): ");
     scanf("%d",&Domaine);
     while(Domaine != 1 && Domaine != 2 ) {
@@ -79,19 +97,22 @@ int main() {
     float SMbrElem[nbneel], uDElem[nbneel];
     int NuDElem[nbneel];
 
+    // Référencement du domaine
     int bord1, bord2, bord3, bord4;
     int nRefDom;
     int nbRefD0, nbRefF1, nbRefD1;
     int numRefD0[4], numRefD1[4], numRefF1[4];
 
-    // Assemblage de la matrice
+    // Assemblage de la matrice + Stockage SMD
     int NbLign, nbcoef;
     int *NumDLDir, *AdPrCoefLi, *NumColD, *AdSuccLi;
     float *ValDLDir, *SecMembre, *MatriceD;
 
+    // Pour stockage SMO
     int* NumColO;
     float* MatriceO;
 
+    // Pour stockage Profil
     int dimProf;
     float* MatProf;
     int* Profil;
@@ -99,10 +120,12 @@ int main() {
     float eps = (float) 1.0e-07;
     float *LowMatProf, *ld, *ll, *y, *U;
 
+    // Solution exacte
     float* UEX;
 
     // Boucle sur tous les fichiers du cas considéré
     for (int i=1; i<7; i++) {
+        // Changement du nom du fichier pour tous les éxecuter
         if (Domaine == 1) {
             if (maillage == 1) {
                 sprintf(ficmai,"../maillage/d1q1/d1q1_%d",(int) pow(2,i));
@@ -118,21 +141,23 @@ int main() {
         }
         printf("%s\n",ficmai);
 
+        // Appel de lecfima pour lire le maillage
         lecfima(ficmai,&typEl,&nbtng,&coord,&nbtel,&ngnel,&nbneel,&nbaret,&nRefAr);
 
-        // Conditons aux bords
-        if(nbneel == 4) {
-            bord1 = nRefAr[0][3];
-            bord2 = nRefAr[nbtel-1][0];
-            bord3 = nRefAr[nbtel-1][1];
-            bord4 = nRefAr[0][2];
-        } else if (nbneel == 3) {
-            bord1 = nRefAr[0][2];
-            bord2 = nRefAr[nbtel-1][1];
-            bord3 = nRefAr[nbtel-1][2];
-            bord4 = nRefAr[0][1];
-        }
+        /* Conditons aux bords */
         nRefDom = nRefAr[0][0];
+        // Numérotation des bords selon quadrangle ou triangle
+        if(nbneel == 4) {
+            bord1 = nRefAr[0][3];           // 1er élément, 4ème (dernière) arrête
+            bord2 = nRefAr[nbtel-1][0];     // dernier élément, 1ère arrête
+            bord3 = nRefAr[nbtel-1][1];     // dernier élément, 2ème arrête
+            bord4 = nRefAr[0][2];           // 1er élément, 3ème arrête
+        } else if (nbneel == 3) {
+            bord1 = nRefAr[0][2];           // 1er élément, 3ème (dernière) arrête
+            bord2 = nRefAr[nbtel-1][1];     // dernier élément, 2ème arrête
+            bord3 = nRefAr[nbtel-1][2];     // dernier élément, 3ème (dernière) arrête
+            bord4 = nRefAr[0][1];           // 1er élément, 2ème arrête
+        }
         if (Domaine == 1) {
             switch (nucas)
             {
@@ -209,6 +234,7 @@ int main() {
         // Affichage de la structure SMD
         // affsmd_(&NbLign,AdPrCoefLi,NumColD,AdSuccLi,MatriceD,SecMembre,NumDLDir,ValDLDir);
         
+        // Passage de la SMD à la SMO
         nbcoef = AdPrCoefLi[NbLign-1]-1;
         NumColO = malloc(nbcoef*sizeof(int));
         MatriceO = calloc(NbLign+nbcoef,sizeof(float));
@@ -218,6 +244,7 @@ int main() {
         // Affichage de la structure SMO
         // affsmo_(&NbLign,AdPrCoefLi,NumColO,MatriceO,SecMembre);
 
+        // Calcul de la taille nécessaire pour le stockage Profil
         dimProf = 0;
         for (int i=0; i<NbLign-1; i++) {
             if (AdPrCoefLi[i+1]-AdPrCoefLi[i]!=0){
@@ -225,13 +252,14 @@ int main() {
             }
         }
 
+        // Passage du stockage SMO à stockage Profil
         MatProf = calloc(NbLign+dimProf,sizeof(float));
         Profil = malloc((NbLign)*sizeof(int));
 
         dSMOaPR(NbLign,AdPrCoefLi,NumColO,MatriceO,Profil,MatProf);
         
         /* Décomposition LLT
-        Résolution :extern int nucas = 1;  
+        Résolution : 
             L*Y = SecMembre
             LT*U = Y
         avec Y = LT*U
@@ -250,6 +278,7 @@ int main() {
         UEX = malloc(NbLign*sizeof(float));
         CalSol(NbLign,coord,UEX);
         
+        // Appel de affsol_ pour imprimer les erreurs sur le terminal (IMPFCH < 0) ou dans un fichier (IMPFCH > 0)
         affsol_(&NbLign,coord[0],U,UEX,&IMPFCH);
     }
 
@@ -274,5 +303,6 @@ int main() {
     free(y);
     free(U);
     free(UEX);
+    
     return 0;
 }

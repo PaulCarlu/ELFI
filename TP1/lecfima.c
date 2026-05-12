@@ -1,3 +1,10 @@
+/* 
+Paul Carlu - Malo Martin 
+Université de Rennes 
+Master 1 CSM
+Module - Elements finis
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "allocmat.h"

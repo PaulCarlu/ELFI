@@ -1,5 +1,10 @@
-// Paul Carlu - Malo Martin
-//
+/* 
+Paul Carlu - Malo Martin 
+Université de Rennes 
+Master 1 CSM
+Module - Elements finis
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -17,10 +22,10 @@ void intElem(int t,float** coorEl, float **matelm, float *vecelm){
 
     // Points et poids de quadrature
     int q = valq(t);
-    float omegaquad[q];
+    float poids[q];
     int dim = (t==3)?1:2;
-    float **xquad = allocmatFLOAT(q,dim);
-    ppquad(t,omegaquad,xquad);
+    float **points = allocmatFLOAT(q,dim);
+    ppquad(t,poids,points);
 
     // Initialisation avant la boucle
     float Fbase_x[nbneel], FK_x[2], det, eltdif, cofvarW;
@@ -32,8 +37,8 @@ void intElem(int t,float** coorEl, float **matelm, float *vecelm){
     
     for (int i=0;i<q;i++){
         // Fonctions de base et dérivées
-        calFbase(t,xquad[i],Fbase_x);
-        calDerFbase(t,xquad[i],DerFbase_x);
+        calFbase(t,points[i],Fbase_x);
+        calDerFbase(t,points[i],DerFbase_x);
         
         // Point de quadrature courant dans l'élément courant
         transFK(nbneel, coorEl, Fbase_x, FK_x);
@@ -42,7 +47,7 @@ void intElem(int t,float** coorEl, float **matelm, float *vecelm){
         matJacob(dim, nbneel, coorEl, DerFbase_x, JacFK_x);
         invertM2x2(JacFK_x,InvJacFK_x,&det);
 
-        eltdif = fabs(det)*omegaquad[i];
+        eltdif = fabs(det)*poids[i];
 
         // Appel de W
         cofvarW = FOMEGA(FK_x);
@@ -61,7 +66,7 @@ void intElem(int t,float** coorEl, float **matelm, float *vecelm){
         }
         ADWDW(nbneel,DerParFbase,eltdif,cofvarADWDW,matelm);
     }
-    freematFLOAT(xquad);
+    freematFLOAT(points);
     freematFLOAT(DerFbase_x);
     freematFLOAT(JacFK_x);
     freematFLOAT(InvJacFK_x);
@@ -77,9 +82,9 @@ void intAret(int refArete, float** coorAr, float **mataret, float *vecaret){
 
     // Points et poids de quadrature
     int q = 3 ;
-    float omegaquad[q];
-    float** xquad = allocmatFLOAT(q,1);
-    ppquad(typEl,omegaquad,xquad);
+    float poids[q];
+    float** points = allocmatFLOAT(q,1);
+    ppquad(typEl,poids,points);
 
     // Initialisation avant la boucle
     float Fbase_x[nbneel], FK_x[2], det, eltdif, cofvar;
@@ -89,17 +94,18 @@ void intAret(int refArete, float** coorAr, float **mataret, float *vecaret){
     
     for (int i=0;i<q;i++){
         // Fonctions de base et dérivées
-        calFbase(typEl,xquad[i],Fbase_x);
-        calDerFbase(typEl,xquad[i],DerFbase_x);
+        calFbase(typEl,points[i],Fbase_x);
+        calDerFbase(typEl,points[i],DerFbase_x);
         
         // Point de quadrature courant dans l'élément courant
         transFK(nbneel, coorAr, Fbase_x, FK_x);
 
         // Jacobienne et son inverse
-        matJacob(1, nbneel, coorAr, DerFbase_x, JacFK_x);// matJacob prend en charge la dimension 1
-        normeJaFk_x = sqrt(fabs( pow(JacFK_x[0][0],2) + pow(JacFK_x[1][0],2) )); // Norme euclidienne de la Jacobienne
+        matJacob(1, nbneel, coorAr, DerFbase_x, JacFK_x);
+        // Norme euclidienne de la Jacobienne
+        normeJaFk_x = sqrt(JacFK_x[0][0]*JacFK_x[0][0] + JacFK_x[1][0]*JacFK_x[1][0]);
 
-        eltdif = normeJaFk_x*omegaquad[i];
+        eltdif = normeJaFk_x*poids[i];
 
         // Appel de W
         cofvar = FN(FK_x,refArete);
@@ -108,10 +114,9 @@ void intAret(int refArete, float** coorAr, float **mataret, float *vecaret){
         // Appel de WW
         cofvar = BN(FK_x);
         WW(nbneel,Fbase_x,eltdif,cofvar,mataret);
-
         
     }
-    freematFLOAT(xquad);
+    freematFLOAT(points);
     freematFLOAT(DerFbase_x);
     freematFLOAT(JacFK_x);
 }

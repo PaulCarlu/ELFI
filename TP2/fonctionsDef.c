@@ -1,5 +1,10 @@
-// Carlu Paul - Martin Malo
-//
+/* 
+Paul Carlu - Malo Martin 
+Université de Rennes 
+Master 1 CSM
+Module - Elements finis
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
@@ -34,7 +39,7 @@ const float PI = M_PI;
             val=1;
             break;
         default :
-            printf("*** SOLEX : exemple non prevu.\n");
+            printf("*** A00 : exemple non prevu.\n");
             break;
         }
         return val;
@@ -60,16 +65,16 @@ const float PI = M_PI;
                 {
                     case 2:
                         return -PI*sin(PI/3.0)*cos(PI*x[1]);
-
+                        break;
                     case 3:
                         return -PI*sin(PI/3.0)*cos(PI*x[0]);
-
+                        break;
                     default:
                         return 0.0;
                 }
                 break;
             default :
-                printf("*** SOLEX : exemple non prevu.\n");
+                printf("*** FN : exemple non prevu.\n");
                 break;
             }
         }
@@ -84,13 +89,13 @@ const float PI = M_PI;
             val=32*(x[0]*(x[0]-1) - x[1]*(1-x[1]));
             break;
             case 2 :
-            val=2*pow(PI,2)*solex(x);
+            val=(2*M_PI*M_PI)*solex(x);
             break;
             case 3 :
-            val=(2*pow(PI,2)+1)*solex(x);
+            val=(2*M_PI*M_PI + 1)*solex(x);
             break;
         default :
-            printf("*** SOLEX : exemple non prevu.\n");
+            printf("*** FOMEGA : exemple non prevu.\n");
             break;
         }
         return val;
@@ -109,7 +114,7 @@ const float PI = M_PI;
             val=solex(x);
             break;
         default :
-            printf("*** SOLEX : exemple non prevu.\n");
+            printf("*** UD : exemple non prevu.\n");
             break;
         }
 

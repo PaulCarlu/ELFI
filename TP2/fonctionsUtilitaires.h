@@ -1,5 +1,10 @@
-// Carlu Paul - Martin Malo
-//
+/* 
+Paul Carlu - Malo Martin 
+Université de Rennes 
+Master 1 CSM
+Module - Elements finis
+*/
+
 void ppquad(int,float*,float**);
 int valq(int);
 void calFbase(int,float*,float*);

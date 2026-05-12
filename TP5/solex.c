@@ -1,3 +1,10 @@
+/* 
+Paul Carlu - Malo Martin 
+Université de Rennes 
+Master 1 CSM
+Module - Elements finis
+*/
+
 #include<math.h>
 #include<stdio.h>
 

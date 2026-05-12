@@ -1,5 +1,9 @@
-// Carlu Paul - Martin Malo
-//
+/* 
+Paul Carlu - Malo Martin 
+Université de Rennes 
+Master 1 CSM
+Module - Elements finis
+*/
 
 float A11(float*);
 float A12(float*);
