@@ -162,7 +162,7 @@ int main() {
             switch (nucas)
             {
             case 1 :
-                nbRefD0 = 1, nbRefD1 = 1, nbRefF1 = 2; 
+                nbRefD0 = 4, nbRefD1 = 0, nbRefF1 = 0; 
                 numRefD0[0] = bord1;
                 numRefD0[1] = bord2;
                 numRefD0[2] = bord3;

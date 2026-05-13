@@ -10,7 +10,7 @@ Ce travail a été réalisé dans le cadre du module **Éléments finis** du mas
 
 La compilation se fait dans le dossier `TP5` à l'aide du fichier : `script.sh`
 
-Avant cela, il est nécessaire de compiler les fichiers Fortran présents dans le dossier `tp5_prof` afin d'obtenir les fichiers `.o` nécessaires.
+Avant cela, il est nécessaire de compiler les fichiers Fortran présents dans le dossier `tp5_prof` afin d'obtenir les fichiers `.o` nécessaires à l'aide de la commande : `gfortran -c *.f` .
 
 ---
 
